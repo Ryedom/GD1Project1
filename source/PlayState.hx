@@ -7,12 +7,17 @@ import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.tile.FlxTilemap;
+import flixel.FlxSprite;
+import flixel.text.FlxText;
 
 class PlayState extends FlxState
 {
 	private var _player:Player;
 	private var _map:FlxOgmoLoader;
 	private var _mWalls:FlxTilemap;
+	private var pipes = new List<Pipe>();
+	private var pipe1 = new FlxSprite();
+	private var tempString:String;
 
 	private function placeEntities(entityName:String, entityData:Xml):Void
 	{
@@ -54,6 +59,10 @@ class PlayState extends FlxState
 		// Spawn/place entities (see "placeEntities")
 		_map.loadEntities(placeEntities, "entities");
 		add(_player);
+		
+		pipes.add(new Pipe(1,2));
+		pipes.add(new Pipe(1,3));
+		
 		super.create();
 	}
 
@@ -61,5 +70,16 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 		FlxG.collide(_player, _mWalls);
+		showPipes();
+	}
+	
+	function showPipes():Void{
+		var temp = 81;
+		for (pipe in pipes){
+			temp += 40;
+			add(pipe.changeStuff(20,temp));
+			var temp2 = pipe.getAmount();
+			add(new FlxText(50,temp+5,200,'x$temp2',16));
+		}
 	}
 }
