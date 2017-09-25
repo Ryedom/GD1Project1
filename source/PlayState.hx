@@ -3,10 +3,12 @@ package;
 import flixel.FlxState;
 import flixel.FlxObject;
 import flixel.FlxG;
-import flixel.util.FlxColor;
+
 import flixel.math.FlxPoint;
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.tile.FlxTilemap;
+import flixel.FlxSprite;
+import flixel.text.FlxText;
 
 enum Direction 
 {
@@ -30,17 +32,11 @@ class PlayState extends FlxState
 	private var _mWalls:FlxTilemap;
 	// rename
 	private var _data:Array<Array<Int>> = [for (i in 0...10) [for (j in 0...14) -1]];
+	private var _map : GameMap;
+	private var _mapPath : String = AssetPaths.testLevel__oel;
 
-	private function placeEntities(entityName:String, entityData:Xml):Void
-	{
-		var x:Int = Std.parseInt(entityData.get("x"));
-		var y:Int = Std.parseInt(entityData.get("y"));
-		// Mapping entities to game classes
-		if (entityName == "player")
-		{
-			_player.x = x;
-			_player.y = y;
-		}
+	override public function create() : Void {
+		_map = new GameMap(_mapPath);
 	}
 
 	////////////
@@ -266,5 +262,14 @@ class PlayState extends FlxState
 		// mapToData();
 		super.update(elapsed);
 		FlxG.collide(_player, _mWalls);
+	}	
+	override public function update(elapsed:Float) : Void {
+		_map.update(elapsed);
+		super.update(elapsed);
+	}
+
+	override public function draw() : Void {
+		_map.draw();
+		super.draw();
 	}
 }
