@@ -7,6 +7,8 @@ import flixel.FlxG;
 import flixel.math.FlxPoint;
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.tile.FlxTilemap;
+import flixel.FlxSprite;
+import flixel.text.FlxText;
 
 class PlayState extends FlxState
 {
