@@ -17,7 +17,7 @@ class MenuState extends FlxState
 		super.create();
 		
 		_bg = new BackgroundImage();
-		_bg.setBg("assets/images/1280x720.png");
+		_bg.setBg("assets/images/assets/ge_background.png");
 		add(_bg);
 		
 		_playButton = new FlxButton(40, 40, "", clickPlay);
