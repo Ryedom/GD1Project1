@@ -109,11 +109,20 @@ class Player extends FlxSprite {
 
     private function movement():Void {
         // Retrieve inputs
+        var _up:Bool = FlxG.keys.anyPressed([W]);
+        var _left:Bool = FlxG.keys.anyPressed([A]);
+        var _down:Bool = FlxG.keys.anyPressed([S]);
+        var _right:Bool = FlxG.keys.anyPressed([D]);
+
+        #if !FLX_NO_GAMEPAD
         var gamepad = FlxG.gamepads.lastActive;
-        var _up:Bool = FlxG.keys.anyPressed([W]) || gamepad.pressed.DPAD_UP || gamepad.getYAxis(LEFT_ANALOG_STICK) < 0.0;
-        var _left:Bool = FlxG.keys.anyPressed([A]) || gamepad.pressed.DPAD_LEFT || gamepad.getXAxis(LEFT_ANALOG_STICK) < 0.0;
-        var _down:Bool = FlxG.keys.anyPressed([S]) || gamepad.pressed.DPAD_DOWN || gamepad.getYAxis(LEFT_ANALOG_STICK) > 0.0;
-        var _right:Bool = FlxG.keys.anyPressed([D]) || gamepad.pressed.DPAD_RIGHT || gamepad.getXAxis(LEFT_ANALOG_STICK) > 0.0;
+        if (gamepad != null) {
+            _up = _up || gamepad.pressed.DPAD_UP || gamepad.getYAxis(LEFT_ANALOG_STICK) < 0.0;
+            _left = _left || gamepad.pressed.DPAD_LEFT || gamepad.getXAxis(LEFT_ANALOG_STICK) < 0.0;
+            _down = _down || gamepad.pressed.DPAD_DOWN || gamepad.getYAxis(LEFT_ANALOG_STICK) > 0.0;
+            _right = _right || gamepad.pressed.DPAD_RIGHT || gamepad.getXAxis(LEFT_ANALOG_STICK) > 0.0;
+        }
+        #end
 
         // Only move when not already moving between tiles
         if (!gridTween.active) {
@@ -150,14 +159,25 @@ class Player extends FlxSprite {
 
     private function pipePlace():Void {
         // Retrieve inputs
-        var gamepad = FlxG.gamepads.lastActive;
-        var _up:Bool = FlxG.keys.anyJustPressed([UP]) || gamepad.justPressed.Y;
-        var _left:Bool = FlxG.keys.anyJustPressed([LEFT]) || gamepad.justPressed.A;
-        var _down:Bool = FlxG.keys.anyJustPressed([DOWN]) || gamepad.justPressed.B;
-        var _right:Bool = FlxG.keys.anyJustPressed([RIGHT]) || gamepad.justPressed.X;
+        var _up:Bool = FlxG.keys.anyJustPressed([UP]);
+        var _left:Bool = FlxG.keys.anyJustPressed([LEFT]);
+        var _down:Bool = FlxG.keys.anyJustPressed([DOWN]);
+        var _right:Bool = FlxG.keys.anyJustPressed([RIGHT]);
         var _rotateLeft:Bool = FlxG.keys.anyJustPressed([Q]);
-        var _rotateRight:Bool = FlxG.keys.anyJustPressed([E]) || gamepad.justPressed.RIGHT_SHOULDER;
-        var _removePipe:Bool = FlxG.keys.anyPressed([SHIFT]) || gamepad.pressed.LEFT_SHOULDER;
+        var _rotateRight:Bool = FlxG.keys.anyJustPressed([E]);
+        var _removePipe:Bool = FlxG.keys.anyPressed([SHIFT]);
+
+        #if !FLX_NO_GAMEPAD
+        var gamepad = FlxG.gamepads.lastActive;
+        if (gamepad != null) {
+            _up = _up || gamepad.justPressed.Y;
+            _left = _left || gamepad.justPressed.A;
+            _down = _down || gamepad.justPressed.B;
+            _right = _right || gamepad.justPressed.X;
+            _rotateRight = _rotateRight || gamepad.justPressed.RIGHT_SHOULDER;
+            _removePipe = _removePipe || gamepad.pressed.LEFT_SHOULDER;
+        }
+        #end
 
         // Handle pipe placement rotation
         if ( !(_rotateLeft && _rotateRight) ) {
