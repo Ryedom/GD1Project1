@@ -4,6 +4,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
+import flixel.FlxG;
 
 class SceneThree extends FlxState
 {
@@ -95,6 +96,10 @@ class SceneThree extends FlxState
 			add(_char[_curNum]);
 			_curNum++;
 			timer.start(_timerDelay);
+		}
+		if (FlxG.keys.pressed.UP)
+		{
+			FlxG.switchState(new SceneGE());
 		}
 	}
 }

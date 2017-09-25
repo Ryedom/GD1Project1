@@ -16,6 +16,8 @@ class MenuState extends FlxState
 	{
 		super.create();
 		
+		FlxG.switchState(new SceneOne());
+		
 		_bg = new BackgroundImage();
 		_bg.setBg("assets/images/1280x720.png");
 		add(_bg);

@@ -18,7 +18,7 @@ class EventImage extends FlxSprite{
 	
 	public function new(){
 		super();
-		loadGraphic("data/images/testingImage2.png", true, 60, 120);
+		loadGraphic("assets/images/CutsceneAssets/kitchen_bang.png", true, 1280, 720);
 		this.scale.set(1, 2);
 		setGraphicSize();
 		updateHitbox();
@@ -33,6 +33,7 @@ class EventImage extends FlxSprite{
 	
 	public function setImage(filename:String, xSize:Int, ySize:Int){
 		loadGraphic(filename, true, xSize, ySize);
+		graphicLoaded();
 	}
 	
 	public function changeFloorHeight(Int)
@@ -68,14 +69,16 @@ class EventImage extends FlxSprite{
 						
 
 				}
-				else if(_shrink > -3)
+				else if(_shrink > -4)
 				{
 					if (_shrink == 0)
-						scale.set(1, 0.5);
+						scale.set(1, 0.25);
 					else if (_shrink == -1)
-						scale.set(1, 0.75);
+						scale.set(1, 0.55);
 					else if (_shrink == -2)
-						scale.set(1, 0.85);
+						scale.set(1, 0.75);
+					else
+						scale.set(1, 1);
 				}
 				setGraphicSize();
 				updateHitbox();
