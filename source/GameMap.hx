@@ -49,29 +49,27 @@ class GameMap {
 		}
 	}
 
-	// NEEDS ADJUSTING FOR ACTUAL SIZE OF PLACEABLE PIPES
-	// Copies tile information from _mWalls to _data
-	// Needs changing to account for different oil sprites (not just default)
+	// HC ISSUE?
+	// Copies tile information from _mPipes to _data
 	private function mapToData():Void
 	{
-		//for (i in 1...11)
 		for (i in 0...10)
 		{
-			//for (j in 3...17) 
 			for (j in 0...14)
 			{
 				if (_mPipes.getTile(i, j) != -1)
 				{
-					//_data[i-1][j-3] = _mPipes.getTile(i, j);
 					_data[i][j] = _mPipes.getTile(i, j);
 				}
 			}
 		}
 	}
 
-	// NEEDS ADJUSTING
-	// see pipe implementation
-	// also will have to account for diff pipe colors???
+	/*
+		Assuming a path down from refinery, which last passed through
+		a pipe in the given direction, checks if the pipe at (x, y)
+		connects to the last pipe
+	*/
 	private function pipesConnect(x:Int, y:Int, dir:Direction):Bool
 	{
 		switch(dir) 
@@ -85,6 +83,7 @@ class GameMap {
 	}
 
 	// NEEDS ADJUSTING FOR ACTUAL VALUES OF OILS
+	// Adds oil sources into _data
 	private function addOil(x:Int, y:Int, oil:OilColor):Void
 	{
 		switch(color)
@@ -96,12 +95,10 @@ class GameMap {
 		}
 	}
 
-	// IMPORTANT!!!!
-	// This will need to be edited to account for all pipe varieties
-	// That if statement is gonna be loooooooong
+	// Checks if _data[x][y] is a pipe
 	private function isPipe(x:Int, y:Int):Bool
 	{
-		if (_data[x][y] != -1 && _data[x][y] < 100)
+		if (_data[x][y] > 0 && _data[x][y] < 11)
 		{
 			return true;
 		}
@@ -109,7 +106,7 @@ class GameMap {
 	}
 
 	// HC ISSUE?
-	// Checks if _data[i][j] has a pipe in it
+	// Returns 1 if  _data[i][j] has a pipe in it, 0 if none
 	private function hasPipe(x:Int, y:Int):Int
 	{
 		if (x < 0 || y < 0 || x > 9 || y > 13)
@@ -126,26 +123,21 @@ class GameMap {
 		}
 	}
 
-
+	// HC ISSUE?
 	// Checks _data to see if all the oil has 1 pipe attached to it
 	private function allOilUsed():Bool
 	{
-		var pipesAttached = 0;
 		for (i in 0...10)
 		{
 			for (j in 0...14) 
 			{
+				var pipesAttached = 0;
 				if (_data[i][j] > 99) 
 				{
 					pipesAttached += hasPipe(i, j-1);
 					pipesAttached += hasPipe(i-1, j);
 					pipesAttached += hasPipe(i+1, j);
 					pipesAttached += hasPipe(i, j+1);
-					// testing
-					//_mWalls.setTile(i, j-1, 2);
-					//_mWalls.setTile(i-1, j, 2);
-					//_mWalls.setTile(i+1, j, 2);
-					//_mWalls.setTile(i, j+1, 2);
 					if (pipesAttached != 1)
 					{
 						return false;
@@ -156,6 +148,7 @@ class GameMap {
 		return true;
 	}
 
+	// Checks if the oil at _data[x][y] matches the pipe it should go to
 	private function oilMatchesSource(x:Int, y:Int, color:Color):Bool
 	{
 		switch(color)
@@ -167,6 +160,22 @@ class GameMap {
 		}
 	}
 
+	/*
+		The following 4 functions follow this key:
+
+		1 = I-pipe, vertical
+		2 = I-pipe, horizontal
+		3 = L-pipe
+		4 = upside-down L-pipe
+		5 = upside-down backwards L-pipe
+		6 = backwards L-pipe
+		7 = T-pipe (no left side)
+		8 = T-pipe (no up side)
+		9 = T-pipe (no right side)
+		10 = T-pipe (no down side)
+	*/
+
+	// Checks if the give pipe can connect north
 	private function getNorth(pipe:Int):Bool
 	{
 		switch(pipe)
@@ -185,6 +194,7 @@ class GameMap {
 		}
 	}
 
+	// Checks if the give pipe can connect west
 	private function getWest(pipe:Int):Bool
 	{
 		switch(pipe)
@@ -203,8 +213,7 @@ class GameMap {
 		}
 	}
 
-	// NEEDS ADJUSTING!!!!
-	// NEED TO KNOW PIPE-TO-NUMBER key
+	// Checks if the give pipe can connect east
 	private function getEast(pipe:Int):Bool
 	{
 		switch(pipe)
@@ -223,8 +232,7 @@ class GameMap {
 		}
 	}
 
-	// NEEDS ADJUSTING!!!!
-	// NEED TO KNOW PIPE-TO-NUMBER key
+	// Checks if the give pipe can connect south
 	private function getSouth(pipe:Int):Bool
 	{
 		switch(pipe)
@@ -243,12 +251,15 @@ class GameMap {
 		}
 	}
 
+	// Recursive function, checking for path to oil source
 	private function checkPipe(x:Int, y:Int, dir:Direction, oil:Color):Bool
 	{
+		// If x and y are out of bounds, return false
 		if (x < 0 || y < 0 || x > 9 || y > 13)
 		{
 			return false;
 		}
+		// If _data[x][y] is an oil source and it matches with the start pipe, return true
 		if (_data[x][y] > 99)
 		{
 			if (oilMatchesSource(x, y, oil))
@@ -260,12 +271,14 @@ class GameMap {
 				return false;
 			}
 		}
+		// If there is no pipe at _data[x][y], return false
 		if (!isPipe(x, y))
 		{
 			return false;
 		}
 		else
 		{
+			// If the current pipe does not connect to the previous pipe, return false
 			if (!pipesConnect(x, y, dir))
 			{
 				return false;
@@ -275,6 +288,7 @@ class GameMap {
 				var pipe = _data[x][y];
 				switch(dir)
 				{
+					// Check all spaces around current pipe except for previous pipe
 					case(NORTH):
 						var temp:Bool = true;
 						if (getNorth(pipe) == true) {
@@ -325,7 +339,6 @@ class GameMap {
 						return temp;
 					default: return false;
 				}
-			return false;
 			}
 		}
 	}
@@ -334,7 +347,7 @@ class GameMap {
 	private function checkSolution():Bool
 	{
 		var complete = false;
-		// these are where you start placing, y+1 underneath starter pipe
+		// these are where you start placing, x+1 underneath starter pipe
 		var tempYList = [4, 5, 10];
 
 		for (y in tempYList)
@@ -367,7 +380,6 @@ class GameMap {
 				}
 			}
 		}
-	
 		return allOilUsed();
 	}
 
