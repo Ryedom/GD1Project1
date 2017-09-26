@@ -9,6 +9,12 @@ import flixel.util.FlxColor;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.FlxObject;
 
+enum Direction {
+	North;
+	West;
+	East;
+	South;
+}
 
 class Pipe extends FlxSprite{
 
