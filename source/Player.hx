@@ -29,10 +29,10 @@ abstract PipeType(Int) {
 }
 
 class PipeTileOrder {
-    public static var STRAIGHT = [10, 11, 10, 11];
-    public static var CURVED = [8, 4, 5, 9];
-    public static var CROSS = [1, 1, 1, 1];
-    public static var TWOWAY = [6, 2, 3, 7];
+    public static var STRAIGHT = [1, 2, 1, 2];
+    public static var CURVED = [3, 4, 5, 6];
+    public static var CROSS = [11, 11, 11, 11];
+    public static var TWOWAY = [10, 7, 8, 9];
     public static var CROSSOVER = [12, 12, 12, 12];
 }
 
@@ -42,7 +42,7 @@ class Player extends FlxSprite {
     private var currentMap : GameMap;
     private var pipeMap : FlxTilemap;
     private var currentPipeDirection : Int = 0;
-    private var currentPipeType : Int = 3;
+    private var currentPipeType : Int = cast PipeType.TWOWAY;
     private var characterX : Int = 0;
     private var characterY : Int = 0;
 

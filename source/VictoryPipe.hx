@@ -4,17 +4,8 @@ import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.FlxObject;
 
-enum OilColor {
-    Black;
-    Red;
-    Blue;
-    Green;
-    Yellow;
-    Purple;
-}
-
-class OilSource extends FlxSprite {
-    @:isVar public var oilColor(get,set) : OilColor;
+class VictoryPipe extends FlxSprite {
+    @:isVar public var oilColor(get,set) : OilSource.OilColor;
 
     public function get_oilColor() {
         return oilColor;
@@ -24,16 +15,15 @@ class OilSource extends FlxSprite {
         return oilColor = value;
     }
 
-    public function new(?X:Float=0, ?Y:Float=0, color : OilColor) {
+    public function new(?X:Float=0, ?Y:Float=0, color : OilSource.OilColor) {
         super(X,Y);
-        loadGraphic(AssetPaths.dirt_ss__png,true,128,128);
         switch(color) {
-            case Black:
-                animation.frameIndex = 2;
-            case Red:
-                animation.frameIndex = 4;
-            case Blue:
-                animation.frameIndex = 3;
+            case OilSource.OilColor.Black:
+                loadGraphic(AssetPaths.st_pipe__png,true,128,128);
+            case OilSource.OilColor.Red:
+                loadGraphic(AssetPaths.red_pipe__png,true,128,128);
+            case OilSource.OilColor.Blue:
+                loadGraphic(AssetPaths.blue_pipes__png,true,128,128);
             default:
                 animation.frameIndex = 2;
         }

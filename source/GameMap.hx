@@ -29,7 +29,7 @@ class GameMap {
 		_mWalls.scale.set(0.5,0.5);
 
         // Load pipes layer
-        _mPipes = _map.loadTilemap(AssetPaths.testPipeTileset__png, 128, 128, "pipes");
+        _mPipes = _map.loadTilemap(AssetPaths.pipe_ss__png, 128, 128, "pipes");
         _mPipes.scale.set(0.5,0.5);
         
 		// Set wall collision properties
@@ -55,7 +55,6 @@ class GameMap {
 		_mPipes.setTileProperties(9, FlxObject.ANY);
 		_mPipes.setTileProperties(10, FlxObject.ANY);
 		_mPipes.setTileProperties(11, FlxObject.ANY);
-		_mPipes.setTileProperties(12, FlxObject.ANY);
 
 		// Spawn/place entities (see "placeEntities")
 		_map.loadEntities(placeEntities, "entities");
