@@ -1,12 +1,16 @@
 package;
 
 import flixel.FlxState;
+import flixel.addons.ui.FlxUIState;
 import flixel.text.FlxText;
 import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
 import flixel.FlxG;
+import flixel.addons.transition.*;
+import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileSquare;
+import flixel.addons.transition.TransitionData.TransitionType;
 
-class InstructionScene extends FlxState
+class InstructionScene extends FlxUIState
 {
 	var _bg:BackgroundImage;
 	
@@ -14,6 +18,9 @@ class InstructionScene extends FlxState
 	
 	override public function create():Void
 	{
+		
+		FlxTransitionableState.defaultTransIn = new TransitionData();
+		
 		_bg = new BackgroundImage();
 		_bg.setBg("assets/images/CutsceneAssets/kitchen_bkgrnd.png");
 		add(_bg);
