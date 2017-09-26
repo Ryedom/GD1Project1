@@ -49,17 +49,19 @@ class Player extends FlxSprite {
     public function new(?X:Float=0, ?Y:Float=0, mapReference : GameMap) {
         super(X, Y);
         // Load player spritesheet
-        loadGraphic(AssetPaths.player__png, true, 128, 128);
+        loadGraphic(AssetPaths.rb_ss__png, true, 128, 128);
         pixelPerfectPosition = true;
         // Set scale, then fix the sprite offset to be the center.
         scale.set(0.5,0.5);
         offset.set(32,32);
         updateHitbox();
         // Animations (currently single frames)
-        animation.add("u", [3], 6, false);
-        animation.add("d", [0], 6, false);
-        animation.add("l", [1], 6, false);
-        animation.add("r", [2], 6, false);
+        animation.add("Left", [0,1,2,3,4], 7, false, true, false);
+        animation.add("StopLeft", [4,5,0], 7, false, true, false);
+        animation.add("Right", [0,1,2,3,4], 7, false, false, false);
+        animation.add("StopRight", [4,5,0], 7, false, false, false);
+        animation.play("StopRight");
+        facing = FlxObject.RIGHT;
         // Assign & initialize various other parameters
         allowCollisions = FlxObject.ANY;
         currentMap = mapReference;
@@ -130,30 +132,66 @@ class Player extends FlxSprite {
                 // Check the tilemap for a possible collision before moving
                 if (!checkCollision(new FlxPoint(x, y - 64))) {
                     gridTween = FlxTween.tween(this, { x: this.x, y: this.y - 64}, tweenDuration);
-                    animation.play("u");
+                    facing = FlxObject.UP;
                 }
             }
             else if (_down) {
                 if (!checkCollision(new FlxPoint(x, y + 64))) {
                     gridTween = FlxTween.tween(this, { x: this.x, y: this.y + 64}, tweenDuration);
-                    animation.play("d");
+                    facing = FlxObject.DOWN;
                 }
             }
             else if (_left) {
                 if (!checkCollision(new FlxPoint(x - 64, y))) {
                     gridTween = FlxTween.tween(this, { x: this.x - 64, y: this.y}, tweenDuration);
-                    animation.play("l");
+                    facing = FlxObject.LEFT;
                 }
             }
             else if (_right) {
                 if (!checkCollision(new FlxPoint(x + 64, y))) {
                     gridTween = FlxTween.tween(this, { x: this.x + 64, y: this.y}, tweenDuration);
-                    animation.play("r");
+                    facing = FlxObject.RIGHT;
                 }
             }
-            else {
-                animation.stop();
-            }
+        }
+
+        // Animation Stuff
+        switch (animation.name) {
+            case "Left":
+                if (!gridTween.active) {
+                    animation.play("StopLeft");
+                }
+                else if (facing == FlxObject.RIGHT) {
+                    var currentFrame : Int = animation.frameIndex;
+                    animation.play("Right");
+                    animation.frameIndex = currentFrame;
+                    animation.finish();
+                }
+            case "Right":
+                if (!gridTween.active) {
+                    animation.play("StopRight");
+                }
+                else if (facing == FlxObject.LEFT) {
+                    var currentFrame : Int = animation.frameIndex;
+                    animation.play("Left");
+                    animation.frameIndex = currentFrame;
+                    animation.finish();
+                }
+            case "StopLeft":
+                if (gridTween.active) {
+                    if (_right)
+                        animation.play("Right");
+                    else
+                        animation.play("Left");
+                        
+                }
+            case "StopRight":
+                if (gridTween.active) {
+                    if (_left)
+                        animation.play("Left");
+                    else
+                        animation.play("Right");
+                }
         }
     }
 
@@ -235,8 +273,8 @@ class Player extends FlxSprite {
     }
 
     override public function update(elapsed:Float):Void {
-        movement();
         pipePlace();
+        movement();
         // Debug: Character's tile position.
         characterX = cast toTilemapCoords(new FlxPoint(this.x,this.y),pipeMap).x;
         characterY = cast toTilemapCoords(new FlxPoint(this.x,this.y),pipeMap).y;
