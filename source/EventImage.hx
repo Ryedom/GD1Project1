@@ -75,7 +75,7 @@ class EventImage extends FlxSprite{
 					else if (_shrink == -1)
 						scale.set(1, 0.75);
 					else if (_shrink == -2)
-						scale.set(1, 0.85);
+						scale.set(1, 1);
 				}
 				setGraphicSize();
 				updateHitbox();
