@@ -10,7 +10,7 @@ class BackgroundImage extends FlxSprite{
 	
 	public function new(){
 		super();
-		loadGraphic("assets/images/CutsceneAssets/kitchen_background.png", true, 1280, 720);
+		loadGraphic("assets/images/CutsceneAssets/kitchen_background.png", false, 1280, 720);
 		//hardcoded the size rn
 	}
 	
