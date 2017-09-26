@@ -15,6 +15,8 @@ enum OilColor {
 
 class OilSource extends FlxSprite {
     @:isVar public var oilColor(get,set) : OilColor;
+    public var x: Int;
+    public var y: Int;
 
     public function get_oilColor() {
         return oilColor;
@@ -22,6 +24,14 @@ class OilSource extends FlxSprite {
 
     private function set_oilColor(value) {
         return oilColor = value;
+    }
+
+    public function getX() {
+    	return x;
+    }
+
+    public function getY() {
+    	return y;
     }
 
     public function new(?X:Float=0, ?Y:Float=0, color : OilColor) {
@@ -42,6 +52,8 @@ class OilSource extends FlxSprite {
         allowCollisions = FlxObject.ANY;
         scale.set(0.5,0.5);
         offset.set(32,32);
+        x = X/64;
+        y = Y/64;
         updateHitbox();
         oilColor = color;
     }
