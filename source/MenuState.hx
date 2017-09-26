@@ -35,6 +35,7 @@ class MenuState extends FlxState
 		_playButton.setPosition((FlxG.width/2 - _playButton.width/2), -_playButton.height);
 		FlxTween.tween(_playButton, {x : (FlxG.width / 2 - _playButton.width / 2), y : (FlxG.height*3 / 4 - _playButton.height/2)}, 1, {ease: FlxEase.cubeIn});
 		
+	
 		add(_banner);
 		add(_playButton);
 	}

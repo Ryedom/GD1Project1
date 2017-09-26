@@ -5,7 +5,6 @@ import flixel.text.FlxText;
 import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
 import flixel.FlxG;
-import flixel.addons.transition;
 
 class SceneOne extends FlxState
 {
