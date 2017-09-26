@@ -24,35 +24,35 @@ class SceneTwo extends FlxState
 		timer.start(_timerDelay);
 		
 		_bg = new BackgroundImage();
-		_bg.setBg("assets/images/CutsceneAssets/leavingforworksetup_background.png");
+		_bg.setBg("assets/images/CutsceneAssets/searching-bg.jpg");
 		add(_bg);
 		
 		_char = new Array();
 		
 		_char[0] = new EventImage();
-		_char[0].setImage("assets/images/CutsceneAssets/leavingforworksetup_oiltowers.png", 204, 390);
-		_char[0].setPosition(92, 0);
-		_char[0].changeFloorHeight(720-400);
+		_char[0].setImage("assets/images/CutsceneAssets/full-house.png", 1280, 720);
+		_char[0].setPosition(0, 0);
+		_char[0].changeFloorHeight(0);
 		
 		_char[1] = new EventImage();
-		_char[1].setImage("assets/images/CutsceneAssets/leavingforworksetup_oiltowers.png", 204, 390);
-		_char[1].setPosition(183, 0);
-		_char[1].changeFloorHeight(720-330);
+		_char[1].setImage("assets/images/CutsceneAssets/searching-dad.png", 1280, 720);
+		_char[1].setPosition(0, 0);
+		_char[1].changeFloorHeight(0);
 		
 		_char[2] = new EventImage();
-		_char[2].setImage("assets/images/CutsceneAssets/leavingforworksetup_oiltowers.png", 204, 390);
-		_char[2].setPosition(416, 0);
-		_char[2].changeFloorHeight(720 - 350);
+		_char[2].setImage("assets/images/CutsceneAssets/tower1.png", 1280, 720);
+		_char[2].setPosition(0, 0);
+		_char[2].changeFloorHeight(0);
 		
 		_char[3] = new EventImage();
-		_char[3].setImage("assets/images/CutsceneAssets/leavingforworksetup_house.png", 510, 390);
-		_char[3].setPosition(1025-510/2, 0);
-		_char[3].changeFloorHeight(720 - 325);
+		_char[3].setImage("assets/images/CutsceneAssets/tower2.png", 1280, 720);
+		_char[3].setPosition(0, 0);
+		_char[3].changeFloorHeight(0);
 		
 		_char[4] = new EventImage();
-		_char[4].setImage("assets/images/CutsceneAssets/leavingforworksetup_father.png", 343, 562);
-		_char[4].setPosition(643, 0);
-		_char[4].changeFloorHeight(50);
+		_char[4].setImage("assets/images/CutsceneAssets/tower3.png", 1280, 720);
+		_char[4].setPosition(0, 0);
+		_char[4].changeFloorHeight(0);
 		
 		_totNum = _char.length;
 		_curNum = 0;
