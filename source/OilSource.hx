@@ -36,15 +36,16 @@ class OilSource extends FlxSprite {
 
     public function new(?X:Float=0, ?Y:Float=0, color : OilColor) {
         super(X,Y);
+        loadGraphic(AssetPaths.dirt_ss__png,true,128,128);
         switch(color) {
             case Black:
-                loadGraphic(AssetPaths.base_oil_block_halo__png, true, 128, 128);
+                animation.frameIndex = 2;
             case Red:
-                loadGraphic(AssetPaths.red_oil_block_halo__png, true, 128, 128);
+                animation.frameIndex = 4;
             case Blue:
-                loadGraphic(AssetPaths.blue_oil_block_halo__png, true, 128, 128);
+                animation.frameIndex = 3;
             default:
-                loadGraphic(AssetPaths.base_oil_block_halo__png, true, 128, 128);
+                animation.frameIndex = 2;
         }
         pixelPerfectPosition = true;
         // Set scale, then fix the sprite offset to be the center.

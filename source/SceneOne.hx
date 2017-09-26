@@ -78,7 +78,7 @@ class SceneOne extends FlxState
 			_curNum++;
 			timer.start(_timerDelay);
 		}
-		if (FlxG.keys.pressed.UP)
+		if (FlxG.keys.pressed.ANY)
 		{
 			FlxG.switchState(new SceneTwo());
 		}
