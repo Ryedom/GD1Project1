@@ -4,9 +4,8 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
-import flixel.FlxG;
 
-class SceneThree extends FlxState
+class SceneBEOne extends FlxState
 {
 	var _bg:BackgroundImage;
 	
@@ -24,37 +23,36 @@ class SceneThree extends FlxState
 		timer.start(_timerDelay);
 		
 		_bg = new BackgroundImage();
-		_bg.setBg("assets/images/CutsceneAssets/mtb_bg.jpg");
+		_bg.setBg("assets/images/CutsceneAssets/beh_bg.png");
 		add(_bg);
 		
 		_char = new Array();
 
 		_char[0] = new EventImage();
-		_char[0].setImage("assets/images/CutsceneAssets/mtb_tower1.png", 1280, 720);
+		_char[0].setImage("assets/images/CutsceneAssets/beh_house.png", 1280, 720);
 		_char[0].setPosition(0, 0);
 		_char[0].changeFloorHeight(0);
-
+		
 		_char[1] = new EventImage();
-		_char[1].setImage("assets/images/CutsceneAssets/mtb_tower2.png", 1280, 720);
+		_char[1].setImage("assets/images/CutsceneAssets/beh_left.png", 1280, 720);
 		_char[1].setPosition(0, 0);
 		_char[1].changeFloorHeight(0);
-
+		
 		_char[2] = new EventImage();
-		_char[2].setImage("assets/images/CutsceneAssets/mtb_tower3.png", 1280, 720);
+		_char[2].setImage("assets/images/CutsceneAssets/beh_right.png", 1280, 720);
 		_char[2].setPosition(0, 0);
-		_char[2].changeFloorHeight(0);	
+		_char[2].changeFloorHeight(0);
 		
 		_char[3] = new EventImage();
-		_char[3].setImage("assets/images/CutsceneAssets/mtb_boss.png", 1280, 720);
+		_char[3].setImage("assets/images/CutsceneAssets/beh_door.png", 1280, 720);
 		_char[3].setPosition(0, 0);
-		_char[3].changeFloorHeight(0);	
-		
+		_char[3].changeFloorHeight(0);
 
 		_char[4] = new EventImage();
-		_char[4].setImage("assets/images/CutsceneAssets/mtb_dad.png", 1280, 720);
+		_char[4].setImage("assets/images/CutsceneAssets/beh_letter.png", 1280, 720);
 		_char[4].setPosition(0, 0);
-		_char[4].changeFloorHeight(0);	
-				
+		_char[4].changeFloorHeight(0);		
+		
 		_totNum = _char.length;
 		_curNum = 0;
 	}
@@ -67,11 +65,6 @@ class SceneThree extends FlxState
 			add(_char[_curNum]);
 			_curNum++;
 			timer.start(_timerDelay);
-		}
-		
-		if (FlxG.keys.pressed.ANY)
-		{
-			//FlxG.switchState(new PlayState());
 		}
 	}
 }

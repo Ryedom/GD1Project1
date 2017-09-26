@@ -67,7 +67,7 @@
   <Tilesets>
     <Tileset>
       <Name>pipes</Name>
-      <FilePath>..\images\testPipeTileset.png</FilePath>
+      <FilePath>..\images\pipe_ss.png</FilePath>
       <TileSize>
         <Width>128</Width>
         <Height>128</Height>
@@ -76,7 +76,7 @@
     </Tileset>
     <Tileset>
       <Name>tiles</Name>
-      <FilePath>..\images\playArea.png</FilePath>
+      <FilePath>..\images\dirt_ss.png</FilePath>
       <TileSize>
         <Width>128</Width>
         <Height>128</Height>

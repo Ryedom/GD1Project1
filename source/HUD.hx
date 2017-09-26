@@ -1,4 +1,4 @@
-package
+package;
 
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -6,7 +6,7 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSpriteUtil;
 
-/*
+/* UNFINISHED
 class PipeDisplayElement extends FlxObject {
     var pipeType : Player.PipeType;
     var pipeIcon : FlxSprite;
