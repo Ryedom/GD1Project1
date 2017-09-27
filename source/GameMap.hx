@@ -28,6 +28,8 @@ class GameMap {
 	public var _mConstantPipes : FlxTilemap;
     public var _mEntities : FlxGroup;
 	public var _Player : Player;
+	public var _pipeDisplay : HUD.PipeDisplay;
+	public var _pipeAmounts : Array<Int>;
 	public var winCondition : Bool = false;
 
 	private var _offset : FlxPoint;
@@ -386,19 +388,19 @@ class GameMap {
 
 	// HC ISSUE?
 	// Returns 1 if  _data[i][j] has a pipe in it, 0 if none
-	private function hasPipe(x:Int, y:Int):Int
+	private function hasPipe(x:Int, y:Int) : Bool
 	{
 		if (x < 0 || y < 0 || x > 9 || y > 9)
 		{
-			return 0;
+			return false;
 		}
 		else if (isPipe(x, y))
 		{
-			return 1;
+			return true;
 		}
 		else
 		{
-			return 0;
+			return false;
 		}
 	}
 
@@ -474,7 +476,7 @@ class GameMap {
 	// Returns number of connected pipes to the oil source at x, y
 	private function onlyOneConnection(x:Int, y:Int):Int
 	{
-		var pipesAttached = 0;
+		var pipesAttached : Int = 0;
 		if (hasPipe(x, y-1) && getSouth(_data[x][y-1]))
 		{
 			pipesAttached += 1;
@@ -527,13 +529,16 @@ class GameMap {
 	//////////////////
 
 
-    public function loadMap(mapPath : String, ?mapType : MapTypeEnum, ?offset : FlxPoint):Void  {
+    public function loadMap(mapPath : String, ?mapType : MapTypeEnum, ?offset : FlxPoint, ?pipeAmounts : Array<Int>):Void  {
 		_lastMapPath = mapPath;
 		_map = new FlxOgmoLoader(mapPath);
 		_mEntities = new FlxGroup(64);
 		if (offset != null)
 			_offset = offset;
 		else _offset = new FlxPoint(0,0);
+
+		_pipeDisplay = new HUD.PipeDisplay(32,128,pipeAmounts);
+		_pipeAmounts = pipeAmounts;
 
         // Load walls layer
 		_mWalls = _map.loadTilemap(AssetPaths.playArea__png, 128, 128, "walls");
@@ -603,6 +608,7 @@ class GameMap {
 		_mConstantPipes.draw();
 		_mPipes.draw();
 		_mEntities.draw();
+		_pipeDisplay.draw();
 	}
 
 	public function reload() {
@@ -638,7 +644,7 @@ class GameMap {
 		}
 	}
 
-    public function new(mapPath : String, ?mapType : MapTypeEnum, ?offset : FlxPoint) {
-		loadMap(mapPath, mapType, offset);
+    public function new(mapPath : String, ?mapType : MapTypeEnum, ?offset : FlxPoint, ?pipeAmounts : Array<Int>) {
+		loadMap(mapPath, mapType, offset,pipeAmounts);
 	}
 }

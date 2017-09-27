@@ -34,6 +34,8 @@ class PipeTileOrder {
     public static var TWOWAY = [10, 7, 8, 9];
 }
 
+
+
 class Player extends FlxSprite {
     private var gridTween : FlxTween;
     private var tweenDuration : Float = 0.25;
@@ -43,6 +45,7 @@ class Player extends FlxSprite {
     private var currentPipeType : Int = cast PipeType.STRAIGHT;
     private var characterX : Int = 0;
     private var characterY : Int = 0;
+    static var IndexToTileType : Array<Int> = [-1,0,0,1,1,1,1,2,2,2,2,3];
 
     public function new(?X:Float=0, ?Y:Float=0, mapReference : GameMap) {
         super(X, Y);
@@ -68,7 +71,6 @@ class Player extends FlxSprite {
         pipeMap = currentMap._mPipes;
         //   (Figure out how to create a blank, inactive tween later)
         gridTween = FlxTween.tween(this, { x: this.x }, 0);
-        FlxG.debugger.addTrackerProfile(new TrackerProfile(Player, ["x", "y", "characterX", "characterY","currentPipeDirection"], []));
     }
 
     // Convert a world-space location to tile-map coordinates.
@@ -112,10 +114,21 @@ class Player extends FlxSprite {
     private function movement():Void {
 		if (!currentMap.winCondition){
 			// Retrieve inputs
-			var _up:Bool = FlxG.keys.anyPressed([W]);
-			var _left:Bool = FlxG.keys.anyPressed([A]);
-			var _down:Bool = FlxG.keys.anyPressed([S]);
-			var _right:Bool = FlxG.keys.anyPressed([D]);
+			var _up:Bool = false;
+			var _left:Bool = false;
+			var _down:Bool = false;
+			var _right:Bool = false;
+            var _placePipe:Bool = false;
+            var _removePipe:Bool = false;
+
+            #if !FLX_NO_KEYBOARD
+            _up = _up || FlxG.keys.anyPressed([W]);
+			_left = _left || FlxG.keys.anyPressed([A]);
+			_down = _down || FlxG.keys.anyPressed([S]);
+			_right = _right || FlxG.keys.anyPressed([D]);
+            _placePipe = _placePipe || FlxG.keys.anyPressed([SPACE]);
+            _removePipe = _removePipe || FlxG.keys.anyPressed([SHIFT]);
+            #end
 
 			#if !FLX_NO_GAMEPAD
 			var gamepad = FlxG.gamepads.lastActive;
@@ -124,11 +137,13 @@ class Player extends FlxSprite {
 				_left = _left || gamepad.pressed.DPAD_LEFT || gamepad.getXAxis(LEFT_ANALOG_STICK) < 0.0;
 				_down = _down || gamepad.pressed.DPAD_DOWN || gamepad.getYAxis(LEFT_ANALOG_STICK) > 0.0;
 				_right = _right || gamepad.pressed.DPAD_RIGHT || gamepad.getXAxis(LEFT_ANALOG_STICK) > 0.0;
+                _placePipe = _placePipe || gamepad.pressed.A;
+                _removePipe = _removePipe || gamepad.pressed.X;
 			}
 			#end
 
 			// Only move when not already moving between tiles
-			if (!gridTween.active) {
+			if (!gridTween.active && !_placePipe && !_removePipe) {
 				if (_up) {
 					// Check the tilemap for a possible collision before moving
 					if (!checkCollision(new FlxPoint(x, y - 64))) {
@@ -201,48 +216,69 @@ class Player extends FlxSprite {
 
     private function pipePlace():Void {
         // Retrieve inputs
-        var _up:Bool = FlxG.keys.anyJustPressed([UP]);
-        var _left:Bool = FlxG.keys.anyJustPressed([LEFT]);
-        var _down:Bool = FlxG.keys.anyJustPressed([DOWN]);
-        var _right:Bool = FlxG.keys.anyJustPressed([RIGHT]);
-        var _rotateLeft:Bool = FlxG.keys.anyJustPressed([Q]);
-        var _rotateRight:Bool = FlxG.keys.anyJustPressed([E]);
-		var _next:Bool = FlxG.keys.anyJustPressed([J]);
-		var _prev:Bool = FlxG.keys.anyJustPressed([K]);
-        var _removePipe:Bool = FlxG.keys.anyPressed([SHIFT]);
+        var _up:Bool = false;
+        var _left:Bool = false;
+        var _down:Bool = false;
+        var _right:Bool = false;
+        var _rotateLeft:Bool = false;
+        var _rotateRight:Bool = false;
+		var _next:Bool = false;
+		var _prev:Bool = false;
+        var _placePipe:Bool = false;
+        var _removePipe:Bool = false;
+
+        #if !FLX_NO_KEYBOARD
+        _up = _up || FlxG.keys.anyJustPressed([W]);
+        _left = _left || FlxG.keys.anyJustPressed([A]);
+        _down = _down || FlxG.keys.anyJustPressed([S]);
+        _right = _right || FlxG.keys.anyJustPressed([D]);
+        _rotateLeft = _rotateLeft || FlxG.keys.anyJustPressed([LEFT]);
+        _rotateRight = _rotateRight || FlxG.keys.anyJustPressed([RIGHT]);
+		_next = _next || FlxG.keys.anyJustPressed([UP]);
+		_prev = _prev || FlxG.keys.anyJustPressed([DOWN]);
+        _placePipe = _placePipe || FlxG.keys.anyPressed([SPACE]);
+        _removePipe = _removePipe || FlxG.keys.anyPressed([SHIFT]);
+        #end
 
         #if !FLX_NO_GAMEPAD
         var gamepad = FlxG.gamepads.lastActive;
         if (gamepad != null) {
-            _up = _up || gamepad.justPressed.Y;
-            _left = _left || gamepad.justPressed.A;
-            _down = _down || gamepad.justPressed.B;
-            _right = _right || gamepad.justPressed.X;
+            _up = _up || gamepad.pressed.DPAD_UP || gamepad.getYAxis(LEFT_ANALOG_STICK) < 0.0;
+			_left = _left || gamepad.pressed.DPAD_LEFT || gamepad.getXAxis(LEFT_ANALOG_STICK) < 0.0;
+			_down = _down || gamepad.pressed.DPAD_DOWN || gamepad.getYAxis(LEFT_ANALOG_STICK) > 0.0;
+			_right = _right || gamepad.pressed.DPAD_RIGHT || gamepad.getXAxis(LEFT_ANALOG_STICK) > 0.0;
+            _rotateLeft = _rotateLeft || gamepad.justPressed.LEFT_SHOULDER;
             _rotateRight = _rotateRight || gamepad.justPressed.RIGHT_SHOULDER;
-            _removePipe = _removePipe || gamepad.pressed.LEFT_SHOULDER;
+            _next = _next || gamepad.pressed.B;
+		    _prev = _prev || gamepad.pressed.Y;
+            _placePipe = _placePipe || gamepad.pressed.A;
+            _removePipe = _removePipe || gamepad.pressed.X;
         }
         #end
 
         // Handle pipe placement rotation
         if ( !(_rotateLeft && _rotateRight) ) {
             // Rotating is just incrementing/decrementing the tile direction enum
-            // (later: send something to the UI to rotate the tile graphics too)
             if (_rotateLeft) {
-                currentPipeDirection = currentPipeDirection == 0 ? 3 : currentPipeDirection - 1;
+                if (currentMap._pipeDisplay.RotateLeft())
+                    currentPipeDirection = currentPipeDirection == 0 ? 3 : currentPipeDirection - 1;
+                
             }
             else if (_rotateRight) {
-                currentPipeDirection = (currentPipeDirection + 1) % 4;
+                if (currentMap._pipeDisplay.RotateRight())
+                    currentPipeDirection = (currentPipeDirection + 1) % 4;
+                
             }
         }
 		
 		if (!(_next && _prev)){
-		
 			if (_next){
 				currentPipeType = currentPipeType == 0 ? 3 : currentPipeType - 1;
 			}
 			else if (_prev){
 				currentPipeType = (currentPipeType + 1) % 4;
 			}
+            currentMap._pipeDisplay.MoveSelector(cast currentPipeType);
 		}
 		
 
@@ -271,29 +307,44 @@ class Player extends FlxSprite {
             // If holding shift, remove the tile in that direction.
             if (_removePipe) {
 				if (tileX > -1 && tileY > -1){
-				    pipeMap.setTile(tileX,tileY,0);
-                    currentMap.removePipe(tileX, tileY);
+                    var tileCoords : FlxPoint = toTilemapCoords(placePoint,pipeMap);
+                    var tileIndex : Int = pipeMap.getTile(cast tileCoords.x, cast tileCoords.y);
+                    if (tileIndex > 0) {
+                        pipeMap.setTile(tileX,tileY,0);
+                        currentMap.removePipe(tileX, tileY);
+                        var pickedPipe : PipeType = cast(IndexToTileType[tileIndex],PipeType);
+                        currentMap._pipeAmounts[cast(pickedPipe,Int)] += 1;
+                        currentMap._pipeDisplay.UpdateText(cast pickedPipe,currentMap._pipeAmounts[cast pickedPipe]);
+                    }
 				}
             }
+
             // If not, place a tile based on the current placement rotation.
-            else if (!checkCollision(placePoint)) {
-                switch (currentPipeType) {
-                    case STRAIGHT:
-                        pipeMap.setTile(tileX,tileY,PipeTileOrder.STRAIGHT[currentPipeDirection]);
-                        currentMap.addPipe(tileX, tileY, PipeTileOrder.STRAIGHT[currentPipeDirection]);
-                    case CURVED:
-                        pipeMap.setTile(tileX,tileY,PipeTileOrder.CURVED[currentPipeDirection]);
-                        currentMap.addPipe(tileX, tileY, PipeTileOrder.CURVED[currentPipeDirection]);
-                    case CROSS:
-                        pipeMap.setTile(tileX,tileY,PipeTileOrder.CROSS[currentPipeDirection]);
-                        currentMap.addPipe(tileX, tileY, PipeTileOrder.CROSS[currentPipeDirection]);
-                    case TWOWAY:
-                        pipeMap.setTile(tileX,tileY,PipeTileOrder.TWOWAY[currentPipeDirection]);
-                        currentMap.addPipe(tileX, tileY, PipeTileOrder.TWOWAY[currentPipeDirection]);
+            else if (_placePipe) {
+                if (!checkCollision(placePoint)) {
+                    if (currentMap._pipeAmounts[currentPipeType] > 0) {
+                        switch (currentPipeType) {
+                            case STRAIGHT:
+                                pipeMap.setTile(tileX,tileY,PipeTileOrder.STRAIGHT[currentPipeDirection]);
+                                currentMap.addPipe(tileX, tileY, PipeTileOrder.STRAIGHT[currentPipeDirection]);
+                            case CURVED:
+                                pipeMap.setTile(tileX,tileY,PipeTileOrder.CURVED[currentPipeDirection]);
+                                currentMap.addPipe(tileX, tileY, PipeTileOrder.CURVED[currentPipeDirection]);
+                            case CROSS:
+                                pipeMap.setTile(tileX,tileY,PipeTileOrder.CROSS[currentPipeDirection]);
+                                currentMap.addPipe(tileX, tileY, PipeTileOrder.CROSS[currentPipeDirection]);
+                            case TWOWAY:
+                                pipeMap.setTile(tileX,tileY,PipeTileOrder.TWOWAY[currentPipeDirection]);
+                                currentMap.addPipe(tileX, tileY, PipeTileOrder.TWOWAY[currentPipeDirection]);
+                        }
+                        currentMap._pipeAmounts[currentPipeType] -= 1;
+                        currentMap._pipeDisplay.UpdateText(cast currentPipeType,cast(currentMap._pipeAmounts[currentPipeType],Int));
+                        if (currentMap.checkSolution()){
+                            currentMap.winCondition = true;
+                        }
+                    }
+                    
                 }
-				if (currentMap.checkSolution()){
-					currentMap.winCondition = true;
-				}
             }
         }
     }

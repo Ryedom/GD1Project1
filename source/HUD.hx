@@ -54,8 +54,6 @@ class PipeDisplayElement extends FlxObject {
                 11;
             case TWOWAY:
                 10;
-            case CROSSOVER:
-                12;
         }
         _pipeIcon.scale.set(0.75,0.75);
         _pipeIcon.offset.set(48,48);
