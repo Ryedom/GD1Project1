@@ -25,11 +25,19 @@ class OilSource extends FlxSprite {
     }
 
     public function getX() {
-    	return _x;
+        return _x;
     }
 
     public function getY() {
     	return _y;
+    }
+
+    public function setX(newX:Int) {
+        _x = Std.int(newX/64);
+    }
+
+    public function setY(newY:Int) {
+        _y = Std.int(newY/64);
     }
 
     public function new(?X:Float=0, ?Y:Float=0, color : OilColor) {
@@ -50,8 +58,6 @@ class OilSource extends FlxSprite {
         allowCollisions = FlxObject.ANY;
         scale.set(0.5,0.5);
         offset.set(32,32);
-        _x = Std.int(X/64);
-        _y = Std.int(Y/64);
         updateHitbox();
         oilColor = color;
     }
