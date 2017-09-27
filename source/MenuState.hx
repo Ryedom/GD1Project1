@@ -23,6 +23,8 @@ class MenuState extends TransitionSetup
 	var _instructButton:FlxButton;
 	var _banner:FlxButton;
 	var _bg:BackgroundImage;
+	var _text:FlxText;
+	var _text2:FlxText;
 	
 	override public function create():Void
 	{
@@ -50,9 +52,18 @@ class MenuState extends TransitionSetup
 		_instructButton.setPosition((FlxG.width/2 - _playButton.width/2), -_playButton.height);
 		FlxTween.tween(_instructButton, {x : (FlxG.width / 2 - _instructButton.width / 2), y : (FlxG.height*3 / 4 - _instructButton.height/2 + 85)}, 1, {ease: FlxEase.cubeIn});
 		
+		_text = new FlxText(0, -500, 300, "Made by: \nElaine Chao\nTim Kim\nRyan O'Mally\nRachel Grigg\nChristopher Chen ", 25);
+		FlxTween.tween(_text, {x:(0), y:( 0)}, 1, {ease: FlxEase.cubeIn});
+		
+		_text2 = new FlxText(FlxG.width - 300, -500, 300, "Special thanks to:\nK Plate",25);
+		FlxTween.tween(_text2, {x:(FlxG.width - 300), y:( 0)}, 1, {ease: FlxEase.cubeIn});
+		
+		
 		add(_banner);
 		add(_playButton);
 		add(_instructButton);
+		add(_text);
+		add(_text2);
 	}
 
 	override public function update(elapsed:Float):Void
@@ -61,7 +72,7 @@ class MenuState extends TransitionSetup
 	}
 	
 	function clickPlay():Void{
-		FlxG.switchState(new SceneOne());
+		FlxG.switchState(new SceneBetweenThree());
 	}
 	
 	function instructionClick():Void{
