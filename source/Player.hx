@@ -42,7 +42,7 @@ class Player extends FlxSprite {
     private var currentMap : GameMap;
     private var pipeMap : FlxTilemap;
     private var currentPipeDirection : Int = 0;
-    private var currentPipeType : Int = cast PipeType.TWOWAY;
+    private var currentPipeType : Int = cast PipeType.STRAIGHT;
     private var characterX : Int = 0;
     private var characterY : Int = 0;
 

@@ -73,7 +73,7 @@ class MenuState extends TransitionSetup
 	
 	function clickPlay():Void{
 
-		FlxG.switchState(new TestState());
+		FlxG.switchState(new SceneBetweenFour());
 	}
 	
 	function instructionClick():Void{
