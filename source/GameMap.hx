@@ -28,6 +28,7 @@ class GameMap {
 	public var _mConstantPipes : FlxTilemap;
     public var _mEntities : FlxGroup;
 	public var _Player : Player;
+	public var winCondition : Bool = false;
 
 	private var _offset : FlxPoint;
 	
@@ -215,6 +216,16 @@ class GameMap {
 					color = Black;
 				}
 				var temp = true;
+				var color: OilSource.OilColor;
+				if (pipe == 22){
+					color = Red;
+				}
+				else if (pipe == 33){
+					color = Blue;
+				}
+				else {
+					color = Black;
+				}
 				if (!getNorth(pipe))
 				{
 					return false;
