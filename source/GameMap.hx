@@ -5,6 +5,7 @@ import flixel.FlxObject;
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.tile.FlxTilemap;
 import flixel.group.FlxGroup;
+import flixel.math.*;
 
 enum MapTypeEnum {
 	Playfield;
@@ -31,8 +32,11 @@ class GameMap {
 	private var _lastMapPath : String;
 	public var _mWalls : FlxTilemap;
     public var _mPipes : FlxTilemap;
+	public var _mConstantPipes : FlxTilemap;
     public var _mEntities : FlxGroup;
 	public var _Player : Player;
+
+	private var _offset : FlxPoint;
 
 	private var _data:Array<Array<Int>> = [for (i in 0...10) [for (j in 0...14) -1]];
 
@@ -227,18 +231,28 @@ class GameMap {
 
 
 
-    public function loadMap(mapPath : String, ?mapType : MapTypeEnum):Void  {
+    public function loadMap(mapPath : String, ?mapType : MapTypeEnum, ?offset : FlxPoint):Void  {
 		_lastMapPath = mapPath;
 		_map = new FlxOgmoLoader(mapPath);
 		_mEntities = new FlxGroup(64);
+		if (offset != null)
+			_offset = offset;
+		else _offset = new FlxPoint(0,0);
 
         // Load walls layer
 		_mWalls = _map.loadTilemap(AssetPaths.playArea__png, 128, 128, "walls");
+		_mWalls.setPosition(_offset.x,_offset.y);
 		_mWalls.scale.set(0.5,0.5);
 
         // Load pipes layer
         _mPipes = _map.loadTilemap(AssetPaths.pipe_ss__png, 128, 128, "pipes");
+		_mPipes.setPosition(_offset.x,_offset.y);
         _mPipes.scale.set(0.5,0.5);
+
+		// Load constant pipes layer
+		_mConstantPipes = _map.loadTilemap(AssetPaths.cpipe_ss__png, 128, 128, "constantpipes");
+		_mConstantPipes.setPosition(_offset.x,_offset.y);
+        _mConstantPipes.scale.set(0.5,0.5);
         
 		// Set wall collision properties
 		//   This is indexed from left to right, continuing from new rows.
@@ -264,6 +278,19 @@ class GameMap {
 		_mPipes.setTileProperties(10, FlxObject.ANY);
 		_mPipes.setTileProperties(11, FlxObject.ANY);
 
+		// Constant Pipes
+		_mConstantPipes.setTileProperties(1, FlxObject.ANY);
+		_mConstantPipes.setTileProperties(2, FlxObject.ANY);
+		_mConstantPipes.setTileProperties(3, FlxObject.ANY);
+		_mConstantPipes.setTileProperties(4, FlxObject.ANY);
+		_mConstantPipes.setTileProperties(5, FlxObject.ANY);
+		_mConstantPipes.setTileProperties(6, FlxObject.ANY);
+		_mConstantPipes.setTileProperties(7, FlxObject.ANY);
+		_mConstantPipes.setTileProperties(8, FlxObject.ANY);
+		_mConstantPipes.setTileProperties(9, FlxObject.ANY);
+		_mConstantPipes.setTileProperties(10, FlxObject.ANY);
+		_mConstantPipes.setTileProperties(11, FlxObject.ANY);
+
 		// Spawn/place entities (see "placeEntities")
 		_map.loadEntities(placeEntities, "entities");
 
@@ -276,6 +303,7 @@ class GameMap {
 
 	public function draw() {
 		_mWalls.draw();
+		_mConstantPipes.draw();
 		_mPipes.draw();
 		_mEntities.draw();
 	}
@@ -286,8 +314,8 @@ class GameMap {
 
     public function placeEntities(entityName:String, entityData:Xml):Void {
 		// Parse entity position
-		var x:Int = Std.parseInt(entityData.get("x"));
-		var y:Int = Std.parseInt(entityData.get("y"));
+		var x:Int = Std.parseInt(entityData.get("x")) + cast _offset.x;
+		var y:Int = Std.parseInt(entityData.get("y")) + cast _offset.y;
 		// Parse optional entity data (initialized to defaults)
 		var color:OilSource.OilColor = OilSource.OilColor.Black;
 		if (entityData.exists("Color"))
@@ -299,12 +327,16 @@ class GameMap {
 		}
 		if (entityName == "OilSource") {
 			var _oil : OilSource = new OilSource(x,y,color);
-			_data[_oil.getX()][_oil.getY()] = 100;
+			//_data[_oil.getX()][_oil.getY()] = 100;
 			_mEntities.add(_oil);
+		}
+		if (entityName == "VictoryPipe") {
+			var _pipe : VictoryPipe = new VictoryPipe(x,y,color);
+			_mEntities.add(_pipe);
 		}
 	}
 
-    public function new(mapPath : String, ?mapType : MapTypeEnum) {
-		loadMap(mapPath, mapType);
+    public function new(mapPath : String, ?mapType : MapTypeEnum, ?offset : FlxPoint) {
+		loadMap(mapPath, mapType, offset);
 	}
 }
