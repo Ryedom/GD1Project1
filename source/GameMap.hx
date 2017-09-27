@@ -29,7 +29,7 @@ class GameMap {
 
 	////////////////////////////// NO HARDCODING SIZE OF ARRAY
 	////////////////////////////// ALL OTHER HARDCODED SIZES WILL ALSO HAVE TO BE CHANGED
-	private var _data:Array<Array<Int>> = [for (i in 0...10) [for (j in 0...14) -1]];
+	private var _data:Array<Array<Int>> = [for (i in 0...10) [for (j in 0...10) -1]];
 
 
 	///////////
@@ -42,7 +42,7 @@ class GameMap {
 	{
 		for (i in 0...10)
 		{
-			for (j in 0...14)
+			for (j in 0...10)
 			{
 				_data[i][j] = -1;
 			}
@@ -55,13 +55,16 @@ class GameMap {
 	{
 		for (i in 0...10)
 		{
-			for (j in 0...14)
+			for (j in 0...10)
 			{
-				if (_mPipes.getTile(i, j) != -1)
+				if (_mPipes.getTile(j, i) != -1)
 				{
-					_data[i][j] = _mPipes.getTile(i, j);
+					_data[i][j] = _mPipes.getTile(j, i);
 				}
+				//var p = _data[i][j];
+				//trace('$p ');
 			}
+			trace(_data[i].toString());
 		}
 	}
 
@@ -84,8 +87,9 @@ class GameMap {
 
 	// NEEDS ADJUSTING FOR ACTUAL VALUES OF OILS
 	// Adds oil sources into _data
-	private function addOil(x:Int, y:Int, oil:OilColor):Void
+	private function addOil(x:Int, y:Int, color:OilSource.OilColor):Void
 	{
+		trace(color);
 		switch(color)
 		{
 			case Red: _data[x][y] = 100;
@@ -93,12 +97,13 @@ class GameMap {
 			case Black: _data[x][y] = 300;
 			default: _data[x][y] = -1;
 		}
+		trace(_data[x][y]);
 	}
 
 	// Checks if _data[x][y] is a pipe
 	private function isPipe(x:Int, y:Int):Bool
 	{
-		if (_data[x][y] > 0 && _data[x][y] < 11)
+		if (_data[x][y] > 0 && _data[x][y] < 10)
 		{
 			return true;
 		}
@@ -109,7 +114,7 @@ class GameMap {
 	// Returns 1 if  _data[i][j] has a pipe in it, 0 if none
 	private function hasPipe(x:Int, y:Int):Int
 	{
-		if (x < 0 || y < 0 || x > 9 || y > 13)
+		if (x < 0 || y < 0 || x > 9 || y > 9)
 		{
 			return 0;
 		}
@@ -129,7 +134,7 @@ class GameMap {
 	{
 		for (i in 0...10)
 		{
-			for (j in 0...14) 
+			for (j in 0...10) 
 			{
 				var pipesAttached = 0;
 				if (_data[i][j] > 99) 
@@ -149,7 +154,7 @@ class GameMap {
 	}
 
 	// Checks if the oil at _data[x][y] matches the pipe it should go to
-	private function oilMatchesSource(x:Int, y:Int, color:Color):Bool
+	private function oilMatchesSource(x:Int, y:Int, color:OilSource.OilColor):Bool
 	{
 		switch(color)
 		{
@@ -252,10 +257,10 @@ class GameMap {
 	}
 
 	// Recursive function, checking for path to oil source
-	private function checkPipe(x:Int, y:Int, dir:Direction, oil:Color):Bool
+	private function checkPipe(x:Int, y:Int, dir:Direction, oil:OilSource.OilColor):Bool
 	{
 		// If x and y are out of bounds, return false
-		if (x < 0 || y < 0 || x > 9 || y > 13)
+		if (x < 0 || y < 0 || x > 9 || y > 9)
 		{
 			return false;
 		}
@@ -343,6 +348,7 @@ class GameMap {
 		}
 	}
 
+	// NEEDS ADJUSTING: need to account for 
 	// Calls recursive function starting from given starting points
 	private function checkSolution():Bool
 	{
@@ -358,7 +364,7 @@ class GameMap {
 			}
 			else
 			{
-				var pipe = _data[x][y];
+				var pipe = _data[0][y];
 				var temp = true;
 				if (!getNorth(pipe))
 				{
@@ -366,13 +372,13 @@ class GameMap {
 				}
 				////////////////////how to check oil at beginning???
 				if (getWest(pipe) == true) {
-					temp = (checkPipe(x, y-1, WEST, Black) && temp);
+					temp = (checkPipe(0, y-1, WEST, Black) && temp);
 				}
 				if (getSouth(pipe) == true) {
-					temp = (checkPipe(x+1, y, SOUTH, Black) && temp);
+					temp = (checkPipe(1, y, SOUTH, Black) && temp);
 				}
 				if (getEast(pipe) == true) {
-					temp = (checkPipe(x, y+1, EAST, Black) && temp);
+					temp = (checkPipe(0, y+1, EAST, Black) && temp);
 				}
 				if (temp == false)
 				{
@@ -435,6 +441,7 @@ class GameMap {
 
 	public function update(elapsed:Float) {
 		_mEntities.update(elapsed);
+		//mapToData();
 	}
 
 	public function draw() {
@@ -462,8 +469,11 @@ class GameMap {
 		}
 		if (entityName == "OilSource") {
 			var _oil : OilSource = new OilSource(x,y,color);
+			trace(_oil.getX());
+			trace(_oil.getY());
 			addOil(_oil.getX(), _oil.getY(), color);
 			_mEntities.add(_oil);
+			mapToData();
 		}
 	}
 
