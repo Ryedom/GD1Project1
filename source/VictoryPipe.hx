@@ -19,11 +19,11 @@ class VictoryPipe extends FlxSprite {
         super(X,Y);
         switch(color) {
             case OilSource.OilColor.Black:
-                loadGraphic(AssetPaths.st_pipe__png,true,128,128);
+                loadGraphic(AssetPaths.blk_pipe__png,true,128,128);
             case OilSource.OilColor.Red:
                 loadGraphic(AssetPaths.red_pipe__png,true,128,128);
             case OilSource.OilColor.Blue:
-                loadGraphic(AssetPaths.blue_pipes__png,true,128,128);
+                loadGraphic(AssetPaths.blu_pipe__png,true,128,128);
             default:
                 animation.frameIndex = 2;
         }

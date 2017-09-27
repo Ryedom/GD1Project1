@@ -41,6 +41,18 @@
       <ExportMode>CSV</ExportMode>
     </LayerDefinition>
     <LayerDefinition xsi:type="TileLayerDefinition">
+      <Name>constantpipes</Name>
+      <Grid>
+        <Width>64</Width>
+        <Height>64</Height>
+      </Grid>
+      <ScrollFactor>
+        <X>1</X>
+        <Y>1</Y>
+      </ScrollFactor>
+      <ExportMode>CSV</ExportMode>
+    </LayerDefinition>
+    <LayerDefinition xsi:type="TileLayerDefinition">
       <Name>pipes</Name>
       <Grid>
         <Width>64</Width>
@@ -94,13 +106,13 @@
         <X>0</X>
         <Y>0</Y>
       </Origin>
-      <ImageDefinition DrawMode="Rectangle" ImagePath="" Tiled="false">
+      <ImageDefinition DrawMode="Image" ImagePath="OgmoEntityPics\player.png" Tiled="false">
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
       <ValueDefinitions />
       <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
     </EntityDefinition>
-    <EntityDefinition Name="ConnectingPipe" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
+    <EntityDefinition Name="VictoryPipe" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
       <Size>
         <Width>64</Width>
         <Height>64</Height>
@@ -109,7 +121,7 @@
         <X>0</X>
         <Y>0</Y>
       </Origin>
-      <ImageDefinition DrawMode="Rectangle" ImagePath="" Tiled="false">
+      <ImageDefinition DrawMode="Image" ImagePath="OgmoEntityPics\victorypipe.png" Tiled="false">
         <RectColor A="255" R="0" G="0" B="255" />
       </ImageDefinition>
       <ValueDefinitions>
@@ -135,7 +147,7 @@
         <X>0</X>
         <Y>0</Y>
       </Origin>
-      <ImageDefinition DrawMode="Image" ImagePath="..\images\base_oil_block_halo.png" Tiled="false">
+      <ImageDefinition DrawMode="Image" ImagePath="OgmoEntityPics\oilsource.png" Tiled="false">
         <RectColor A="255" R="0" G="0" B="0" />
       </ImageDefinition>
       <ValueDefinitions>

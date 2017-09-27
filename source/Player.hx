@@ -92,7 +92,7 @@ class Player extends FlxSprite {
 
     // Check collision. Doesn't use tilemap's bounds().containsPoint as will return false-positives in some situations.
     private function checkCollision(point : FlxPoint):Bool {
-        for (tileMap in [currentMap._mWalls,currentMap._mPipes]) {
+        for (tileMap in [currentMap._mWalls,currentMap._mPipes,currentMap._mConstantPipes]) {
             if (point.x < tileMap.x || point.y < tileMap.y)
                 return true;
             if (point.x >= tileMap.x + tileMap.width || point.y >= tileMap.y + tileMap.height)
