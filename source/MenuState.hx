@@ -1,14 +1,22 @@
 package;
 
 import flixel.FlxState;
+import flixel.addons.ui.FlxUIState;
+import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.FlxG;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import haxe.macro.Compiler.IncludePosition;
+import flixel.addons.transition.*;
+import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
+import flixel.addons.transition.TransitionData.TransitionType;
+import flixel.util.FlxColor;
 
-class MenuState extends FlxState
+import flixel.graphics.FlxGraphic;
+
+class MenuState extends TransitionSetup
 {
 	
 	var _playButton:FlxButton;
@@ -21,7 +29,7 @@ class MenuState extends FlxState
 		super.create();
 		
 		_bg = new BackgroundImage();
-		_bg.setBg("assets/images/CutsceneAssets/title.png");
+		_bg.setBg("assets/images/CutsceneAssets/title_3.png");
 		add(_bg);
 		
 		_banner = new FlxButton(40, 40, "", clickPlay);
@@ -31,13 +39,13 @@ class MenuState extends FlxState
 		FlxTween.tween(_banner, {x : (FlxG.width / 2 - _banner.width / 2), y : (FlxG.height * 1.35 / 4 - _banner.height / 2)}, 1, {ease: FlxEase.cubeIn});
 				
 		_playButton = new FlxButton(40, 40, "", clickPlay);
-		_playButton.loadGraphic("assets/images/COOLbuttoNASSET.png");
+		_playButton.loadGraphic("assets/images/start.jpg");
 		_playButton.updateHitbox();
 		_playButton.setPosition((FlxG.width/2 - _playButton.width/2), -_playButton.height);
 		FlxTween.tween(_playButton, {x : (FlxG.width / 2 - _playButton.width / 2), y : (FlxG.height*3 / 4 - _playButton.height/2 - 50)}, 1, {ease: FlxEase.cubeIn});
 		
 		_instructButton = new FlxButton(40, 40, "", instructionClick);
-		_instructButton.loadGraphic("assets/images/COOLbuttoNASSET.png");
+		_instructButton.loadGraphic("assets/images/Htp.jpg");
 		_instructButton.updateHitbox();
 		_instructButton.setPosition((FlxG.width/2 - _playButton.width/2), -_playButton.height);
 		FlxTween.tween(_instructButton, {x : (FlxG.width / 2 - _instructButton.width / 2), y : (FlxG.height*3 / 4 - _instructButton.height/2 + 85)}, 1, {ease: FlxEase.cubeIn});

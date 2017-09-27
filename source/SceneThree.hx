@@ -71,7 +71,7 @@ class SceneThree extends FlxState
 		
 		if (FlxG.keys.pressed.ANY)
 		{
-			//FlxG.switchState(new PlayState());
+			FlxG.switchState(new PlayState());
 		}
 	}
 }
