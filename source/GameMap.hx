@@ -36,96 +36,28 @@ class GameMap {
 	////////////
 	///////////
 
-	// HC ISSUE?
-	// Resets all numbers in _data to -1
-	private function clearData():Void
-	{
-		for (i in 0...10)
-		{
-			for (j in 0...10)
-			{
-				_data[i][j] = -1;
-			}
-		}
-	}
-
-	// HC ISSUE?
-	// Copies tile information from _mPipes to _data
-	private function mapToData():Void
-	{
-		for (i in 0...10)
-		{
-			for (j in 0...10)
-			{
-				if (_mPipes.getTile(j, i) != -1)
-				{
-					_data[i][j] = _mPipes.getTile(j, i);
-				}
-				//var p = _data[i][j];
-				//trace('$p ');
-			}
-			trace(_data[i].toString());
-		}
-	}
-
-	/*
-		Assuming a path down from refinery, which last passed through
-		a pipe in the given direction, checks if the pipe at (x, y)
-		connects to the last pipe
-	*/
-	private function pipesConnect(x:Int, y:Int, dir:Direction):Bool
-	{
-		switch(dir) 
-		{
-			case NORTH: return getSouth(_data[x][y]);
-			case SOUTH: return getNorth(_data[x][y]);
-			case EAST: return getWest(_data[x][y]);
-			case WEST: return getEast(_data[x][y]);
-		}
-		return false;
-	}
-
-	// NEEDS ADJUSTING FOR ACTUAL VALUES OF OILS
 	// Adds oil sources into _data
 	private function addOil(x:Int, y:Int, color:OilSource.OilColor):Void
 	{
-		trace(color);
 		switch(color)
 		{
-			case Red: _data[x][y] = 100;
-			case Blue: _data[x][y] = 200;
-			case Black: _data[x][y] = 300;
-			default: _data[x][y] = -1;
+			case Red: _data[y][x] = 200;
+			case Blue: _data[y][x] = 300;
+			case Black: _data[y][x] = 400;
+			default: _data[y][x] = -1;
 		}
-		trace(_data[x][y]);
 	}
 
-	// Checks if _data[x][y] is a pipe
-	private function isPipe(x:Int, y:Int):Bool
+	// Adds VictoryPipes into _data
+	private function addVPipe(x:Int, y:Int, color:OilSource.OilColor):Void
 	{
-		if (_data[x][y] > 0 && _data[x][y] < 10)
+		switch(color)
 		{
-			return true;
-		}
-		return false;
-	}
-
-	// HC ISSUE?
-	// Returns 1 if  _data[i][j] has a pipe in it, 0 if none
-	private function hasPipe(x:Int, y:Int):Int
-	{
-		if (x < 0 || y < 0 || x > 9 || y > 9)
-		{
-			return 0;
-		}
-		else if (isPipe(x, y))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
+			case Red: _data[y][x] = 22;
+			case Blue: _data[y][x] = 33;
+			case Black: _data[y][x] = 44;
+			default: _data[y][x] = -1;
+		}	
 	}
 
 	// HC ISSUE?
@@ -153,109 +85,7 @@ class GameMap {
 		return true;
 	}
 
-	// Checks if the oil at _data[x][y] matches the pipe it should go to
-	private function oilMatchesSource(x:Int, y:Int, color:OilSource.OilColor):Bool
-	{
-		switch(color)
-		{
-			case(Red): return (_data[x][y] == 100);
-			case(Blue): return (_data[x][y] == 200);
-			case(Black): return (_data[x][y] == 300);
-			default: return false;
-		}
-	}
-
-	/*
-		The following 4 functions follow this key:
-
-		1 = I-pipe, vertical
-		2 = I-pipe, horizontal
-		3 = L-pipe
-		4 = upside-down L-pipe
-		5 = upside-down backwards L-pipe
-		6 = backwards L-pipe
-		7 = T-pipe (no left side)
-		8 = T-pipe (no up side)
-		9 = T-pipe (no right side)
-		10 = T-pipe (no down side)
-	*/
-
-	// Checks if the give pipe can connect north
-	private function getNorth(pipe:Int):Bool
-	{
-		switch(pipe)
-		{
-			case(1): return true;
-			case(2): return false;
-			case(3): return true;
-			case(4): return false;
-			case(5): return false;
-			case(6): return true;
-			case(7): return true;
-			case(8): return false;
-			case(9): return true;
-			case(10): return true;
-			default: return false;
-		}
-	}
-
-	// Checks if the give pipe can connect west
-	private function getWest(pipe:Int):Bool
-	{
-		switch(pipe)
-		{
-			case(1): return false;
-			case(2): return true;
-			case(3): return false;
-			case(4): return false;
-			case(5): return true;
-			case(6): return true;
-			case(7): return false;
-			case(8): return true;
-			case(9): return true;
-			case(10): return true;
-			default: return false;
-		}
-	}
-
-	// Checks if the give pipe can connect east
-	private function getEast(pipe:Int):Bool
-	{
-		switch(pipe)
-		{
-			case(1): return false;
-			case(2): return true;
-			case(3): return true;
-			case(4): return true;
-			case(5): return false;
-			case(6): return false;
-			case(7): return true;
-			case(8): return true;
-			case(9): return false;
-			case(10): return true;
-			default: return false;
-		}
-	}
-
-	// Checks if the give pipe can connect south
-	private function getSouth(pipe:Int):Bool
-	{
-		switch(pipe)
-		{
-			case(1): return true;
-			case(2): return false;
-			case(3): return false;
-			case(4): return true;
-			case(5): return true;
-			case(6): return false;
-			case(7): return true;
-			case(8): return true;
-			case(9): return true;
-			case(10): return false;
-			default: return false;
-		}
-	}
-
+	// HC ISSUE?
 	// Recursive function, checking for path to oil source
 	private function checkPipe(x:Int, y:Int, dir:Direction, oil:OilSource.OilColor):Bool
 	{
@@ -348,15 +178,14 @@ class GameMap {
 		}
 	}
 
-	// NEEDS ADJUSTING: need to account for 
 	// Calls recursive function starting from given starting points
 	private function checkSolution():Bool
 	{
 		var complete = false;
 		// these are where you start placing, x+1 underneath starter pipe
-		var tempYList = [4, 5, 10];
+		var yList = vPipeCoords();
 
-		for (y in tempYList)
+		for (y in yList)
 		{
 			if (!isPipe(0, y))
 			{
@@ -370,7 +199,6 @@ class GameMap {
 				{
 					return false;
 				}
-				////////////////////how to check oil at beginning???
 				if (getWest(pipe) == true) {
 					temp = (checkPipe(0, y-1, WEST, Black) && temp);
 				}
@@ -389,10 +217,250 @@ class GameMap {
 		return allOilUsed();
 	}
 
+
+	// HC ISSUE?
+	// Resets all numbers in _data to -1
+	private function clearData():Void
+	{
+		for (i in 0...10)
+		{
+			for (j in 0...10)
+			{
+				_data[i][j] = -1;
+			}
+		}
+	}
+
+	// HC ISSUE?
+	// Finds the y coordinate of VictoryPipes (x is always 0)
+	private function vPipeCoords():Array<Int>
+	{
+		var _array:Array<Int>;
+		for (y in 0...10)
+		{
+			if (isVPipe(0, y))
+			{
+				_array.push(y);
+			}
+		}
+		return _array;
+	}
+
+	/*
+		The following 4 functions follow this key:
+
+		1 = I-pipe, vertical
+		2 = I-pipe, horizontal
+		3 = L-pipe
+		4 = upside-down L-pipe
+		5 = upside-down backwards L-pipe
+		6 = backwards L-pipe
+		7 = T-pipe (no left side)
+		8 = T-pipe (no up side)
+		9 = T-pipe (no right side)
+		10 = T-pipe (no down side)
+
+		22, 33, and 44 are VictoryPipes: straight vertical pipes
+	*/
+
+
+	// Checks if the give pipe can connect east
+	private function getEast(pipe:Int):Bool
+	{
+		switch(pipe)
+		{
+			case(1): return false;
+			case(2): return true;
+			case(3): return true;
+			case(4): return true;
+			case(5): return false;
+			case(6): return false;
+			case(7): return true;
+			case(8): return true;
+			case(9): return false;
+			case(10): return true;
+			case(22): return false
+			case(33): return false;
+			case(44): return false;
+			default: return false;
+		}
+	}
+
+	// Checks if the give pipe can connect north
+	private function getNorth(pipe:Int):Bool
+	{
+		switch(pipe)
+		{
+			case(1): return true;
+			case(2): return false;
+			case(3): return true;
+			case(4): return false;
+			case(5): return false;
+			case(6): return true;
+			case(7): return true;
+			case(8): return false;
+			case(9): return true;
+			case(10): return true;
+			case(22): return true
+			case(33): return true;
+			case(44): return true
+			default: return false;
+		}
+	}
+
+	// Checks if the give pipe can connect south
+	private function getSouth(pipe:Int):Bool
+	{
+		switch(pipe)
+		{
+			case(1): return true;
+			case(2): return false;
+			case(3): return false;
+			case(4): return true;
+			case(5): return true;
+			case(6): return false;
+			case(7): return true;
+			case(8): return true;
+			case(9): return true;
+			case(10): return false;
+			case(22): return true
+			case(33): return true;
+			case(44): return true;
+			default: return false;
+		}
+	}
+
+
+	// Checks if the give pipe can connect west
+	private function getWest(pipe:Int):Bool
+	{
+		switch(pipe)
+		{
+			case(1): return false;
+			case(2): return true;
+			case(3): return false;
+			case(4): return false;
+			case(5): return true;
+			case(6): return true;
+			case(7): return false;
+			case(8): return true;
+			case(9): return true;
+			case(10): return true;
+			case(22): return false
+			case(33): return false;
+			case(44): return false;
+			default: return false;
+		}
+	}
+
+	// HC ISSUE?
+	// Returns 1 if  _data[i][j] has a pipe in it, 0 if none
+	private function hasPipe(x:Int, y:Int):Int
+	{
+		if (x < 0 || y < 0 || x > 9 || y > 9)
+		{
+			return 0;
+		}
+		else if (isPipe(x, y))
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	// Checks if _data[x][y] is an oil source
+	private function isOilSource(x:Int, y:Int):Bool
+	{
+		if (_data[x][y] == 200 || _data[x][y] == 300 || _data[x][y] == 400)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	// Checks if _data[x][y] is a pipe
+	private function isPipe(x:Int, y:Int):Bool
+	{
+		if (_data[x][y] > 0 && _data[x][y] < 10)
+		{
+			return true;
+		}
+		else if (_data[x][y] == 22 || _data[x][y] == 33 || _data[x][y] == 44)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	// Checks if _data[x][y] is a VictoryPipe
+	private function isVPipe(x:Int, y:Int):Bool
+	{
+		if (_data[x][y] == 22 || _data[x][y] == 33 || _data[x][y] == 44)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	// HC ISSUE?
+	// Copies tile information from _mPipes to _data
+	private function mapToData():Void
+	{
+		for (i in 0...10)
+		{
+			for (j in 0...10)
+			{
+				var pipetile:Int = _mPipes.getTile(j, i);
+				if (pipetile != -1 && !isOilSource(i, j) && !isVPipe(i, j))
+				{
+					_data[i][j] = _mPipes.getTile(j, i);
+				}
+				//var p = _data[i][j];
+				//trace('$p ');
+			}
+			trace(_data[i].toString());
+		}
+	}
+
+	// Checks if the oil at _data[x][y] matches the pipe it should go to
+	private function oilMatchesSource(x:Int, y:Int, color:OilSource.OilColor):Bool
+	{
+		switch(color)
+		{
+			case(Red): return (_data[x][y] == 100);
+			case(Blue): return (_data[x][y] == 200);
+			case(Black): return (_data[x][y] == 300);
+			default: return false;
+		}
+	}
+
+	/*
+		Assuming a path down from refinery, which last passed through
+		a pipe in the given direction, checks if the pipe at (x, y)
+		connects to the last pipe
+	*/
+	private function pipesConnect(x:Int, y:Int, dir:Direction):Bool
+	{
+		switch(dir) 
+		{
+			case NORTH: return getSouth(_data[x][y]);
+			case SOUTH: return getNorth(_data[x][y]);
+			case EAST: return getWest(_data[x][y]);
+			case WEST: return getEast(_data[x][y]);
+		}
+		return false;
+	}
+
+
 	///////////////////
 	/////////////////
 	//////////////////
-
 
 
 
@@ -469,11 +537,8 @@ class GameMap {
 		}
 		if (entityName == "OilSource") {
 			var _oil : OilSource = new OilSource(x,y,color);
-			trace(_oil.getX());
-			trace(_oil.getY());
 			addOil(_oil.getX(), _oil.getY(), color);
 			_mEntities.add(_oil);
-			mapToData();
 		}
 	}
 
