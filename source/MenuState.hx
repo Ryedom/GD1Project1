@@ -10,13 +10,13 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import haxe.macro.Compiler.IncludePosition;
 import flixel.addons.transition.*;
-import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileSquare;
+import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
 import flixel.addons.transition.TransitionData.TransitionType;
 import flixel.util.FlxColor;
 
 import flixel.graphics.FlxGraphic;
 
-class MenuState extends FlxUIState
+class MenuState extends TransitionSetup
 {
 	
 	var _playButton:FlxButton;
@@ -27,24 +27,6 @@ class MenuState extends FlxUIState
 	override public function create():Void
 	{
 		super.create();
-		
-		FlxTransitionableState.defaultTransIn = new TransitionData();
-		FlxTransitionableState.defaultTransOut = new TransitionData();
-		
-			var square:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileSquare);
-			square.persist = true;
-			square.destroyOnNoUse = false;
-		
-		
-		FlxTransitionableState.defaultTransOut.tileData = { asset: square, width: 32, height: 32 };
-		
-		FlxTransitionableState.defaultTransOut.color = FlxColor.WHITE;
-		FlxTransitionableState.defaultTransOut.type = TransitionType.TILES;
-		FlxTransitionableState.defaultTransOut.duration = 1;
-		FlxTransitionableState.defaultTransOut.direction = new FlxPoint();
-		FlxTransitionableState.defaultTransOut.direction.set(0, 1);
-		
-		transOut = FlxTransitionableState.defaultTransOut;
 		
 		_bg = new BackgroundImage();
 		_bg.setBg("assets/images/CutsceneAssets/title_3.png");
@@ -63,7 +45,7 @@ class MenuState extends FlxUIState
 		FlxTween.tween(_playButton, {x : (FlxG.width / 2 - _playButton.width / 2), y : (FlxG.height*3 / 4 - _playButton.height/2 - 50)}, 1, {ease: FlxEase.cubeIn});
 		
 		_instructButton = new FlxButton(40, 40, "", instructionClick);
-		_instructButton.loadGraphic("assets/images/start.jpg");
+		_instructButton.loadGraphic("assets/images/Htp.jpg");
 		_instructButton.updateHitbox();
 		_instructButton.setPosition((FlxG.width/2 - _playButton.width/2), -_playButton.height);
 		FlxTween.tween(_instructButton, {x : (FlxG.width / 2 - _instructButton.width / 2), y : (FlxG.height*3 / 4 - _instructButton.height/2 + 85)}, 1, {ease: FlxEase.cubeIn});
@@ -79,7 +61,7 @@ class MenuState extends FlxUIState
 	}
 	
 	function clickPlay():Void{
-		FlxG.switchState(new SceneBEOne());
+		FlxG.switchState(new SceneOne());
 	}
 	
 	function instructionClick():Void{
