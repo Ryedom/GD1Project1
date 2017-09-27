@@ -15,6 +15,7 @@ class SceneThree extends FlxState
 	var _curNum:Int;
 	var timer:FlxTimer;
 	var _timerDelay:Float;
+	var _delayUntilGo:FlxTimer;
 	
 	override public function create():Void
 	{
@@ -22,6 +23,9 @@ class SceneThree extends FlxState
 		super.create();
 		timer = new FlxTimer();
 		timer.start(_timerDelay);
+		
+		_delayUntilGo = new FlxTimer();
+		_delayUntilGo.start(99999);
 		
 		_bg = new BackgroundImage();
 		_bg.setBg("assets/images/CutsceneAssets/mtb_bg.jpg");
@@ -69,9 +73,9 @@ class SceneThree extends FlxState
 			timer.start(_timerDelay);
 		}
 		
-		if (FlxG.keys.pressed.ANY)
+		if (FlxG.keys.pressed.ANY && _delayUntilGo.elapsedTime > 2)
 		{
-			//FlxG.switchState(new PlayState());
+			FlxG.switchState(new PlayState());
 		}
 	}
 }

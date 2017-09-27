@@ -4,6 +4,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
+import flixel.FlxG;
 
 class SceneGE extends FlxState
 {
@@ -14,6 +15,7 @@ class SceneGE extends FlxState
 	var _curNum:Int;
 	var timer:FlxTimer;
 	var _timerDelay:Float;
+	var _delayUntilGo:FlxTimer;
 	
 	override public function create():Void
 	{
@@ -21,6 +23,9 @@ class SceneGE extends FlxState
 		super.create();
 		timer = new FlxTimer();
 		timer.start(_timerDelay);
+		
+		_delayUntilGo = new FlxTimer();
+		_delayUntilGo.start(99999);
 		
 		_bg = new BackgroundImage();
 		_bg.setBg("assets/images/CutsceneAssets/ge_background.png");
@@ -65,6 +70,10 @@ class SceneGE extends FlxState
 			add(_char[_curNum]);
 			_curNum++;
 			timer.start(_timerDelay);
+		}
+		if (FlxG.keys.pressed.ANY && _delayUntilGo.elapsedTime > 2)
+		{
+			//FlxG.switchState(new SceneTwo());
 		}
 	}
 }

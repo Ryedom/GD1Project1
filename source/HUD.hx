@@ -6,18 +6,14 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSpriteUtil;
 
-/* UNFINISHED
+/*
 class PipeDisplayElement extends FlxObject {
-    var pipeType : Player.PipeType;
-    var pipeIcon : FlxSprite;
-    var pipeText : FlxText;
+    var _pipeType : Player.PipeType;
+    var _pipeIcon : FlxSprite;
+    var _pipeText : FlxText;
 
-    var pipeRotateTween : FlxTween;
+    var _pipeRotateTween : FlxTween;
 
-    override public function draw() {
-        pipeIcon.draw();
-        pipeText.draw();
-    }
 
     public function RotateLeft() : Bool {
 
@@ -28,21 +24,50 @@ class PipeDisplayElement extends FlxObject {
     }
 
     public function UpdateText(num : Int) : Void {
-        pipeText.text = "x " + num;
+        _pipeText.text = "x " + num;
     }
 
-    
+    public function new(pipeType : Player.PipeType, ?startingNumber : Int) : Void {
+        super(0,0);
+        _pipeType = pipeType;
+        _pipeIcon = new FlxSprite(x,y);
+        _pipeIcon.loadGraphic(AssetPaths.pipe_ss__png,true,64,64);
+        _pipeIcon.animation.frameIndex = switch(pipeType) {
+            case STRAIGHT:
+                1;
+            case CURVED:
+                2;
+            case CROSS:
+                3;
+            case TWOWAY:
+                4;
+            case CROSSOVER:
+                5;
+        }
+        _pipeText = new FlxText(x + 64, y, 256);
+        UpdateText(startingNumber);
+    }
+
+    override public function draw() {
+        _pipeIcon.draw();
+        _pipeText.draw();
+    }    
 }
 
 class PipeDisplay extends FlxObject {
     var pipeElements : Array<FlxObject>;
 
-    public function TakePipe(pipeType: Player.PipeType) {
+    public function TakePipe(pipeType: Player.PipeType) : Bool {
+
+    }
+
+    public function ReplacePipe(pipeType: Player.PipeType) : Bool {
 
     }
 
     public function RotateLeft() : Bool {
-        for (element in pipeElements) {
+        for (elementObject in pipeElements) {
+            var element : PipeDisplayElement = cast elementObject;
             if (!element.RotateLeft())
                 return false;
         }
@@ -50,7 +75,8 @@ class PipeDisplay extends FlxObject {
     }
 
     public function RotateRight() : Bool {
-        for (element in pipeElements) {
+        for (elementObject in pipeElements) {
+            var element : PipeDisplayElement = cast elementObject;
             if (!element.RotateLeft())
                 return false;
         }
@@ -62,7 +88,9 @@ class PipeDisplay extends FlxObject {
     }
 
     public function new(?X:Float=0, ?Y:Float=0, ) {
-
+        for (i in 0..5) {
+            newIcon : PipeDisplayElement = new PipeDisplayElement(cast i,0);
+        }
     }
 
     override public function draw() {

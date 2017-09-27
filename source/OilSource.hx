@@ -8,9 +8,6 @@ enum OilColor {
     Black;
     Red;
     Blue;
-    Green;
-    Yellow;
-    Purple;
 }
 
 class OilSource extends FlxSprite {
