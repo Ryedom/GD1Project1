@@ -13,9 +13,10 @@ import flixel.text.FlxText;
 class TestState extends FlxState
 {
 	private var _map : GameMap;
-	private var _mapPath : String = AssetPaths.levelTwo__oel;
+	private var _mapPath : String = AssetPaths.levelFour__oel;
 	private var _background : FlxSprite;
-	private var timerText: FlxText = new FlxText(10,10,300,"300",36);
+	
+	private var timerText: FlxText = new FlxText(200,200,300,"300",36);
 	private var timer: Float = 300;
 	
 	public var wonLevel: Bool = false;

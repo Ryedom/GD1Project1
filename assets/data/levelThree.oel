@@ -31,8 +31,8 @@
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1</pipes>
   <entities>
     <VictoryPipe id="0" x="192" y="0" Color="Red" />
-    <VictoryPipe id="1" x="320" y="0" Color="Blue" />
-    <OilSource id="2" x="320" y="128" Color="Red" />
+    <OilSource id="1" x="320" y="128" Color="Red" />
+    <VictoryPipe id="2" x="320" y="0" Color="Blue" />
     <OilSource id="3" x="192" y="192" Color="Blue" />
     <Player id="4" x="256" y="0" />
   </entities>
