@@ -75,7 +75,7 @@ class SceneThree extends FlxState
 		
 		if (FlxG.keys.pressed.ANY && _delayUntilGo.elapsedTime > 2)
 		{
-			FlxG.switchState(new PlayState());
+			FlxG.switchState(new MainGameState());
 		}
 	}
 }

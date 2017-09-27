@@ -56,10 +56,7 @@ class GameMap {
 	public function addPipe(x:Int, y:Int, tile:Int):Void
 	{
 		_data[y][x] = tile;
-		for (i in 0...10)
-		{
-			trace(_data[i].toString());
-		}
+
 	}
 
 	// Adds VictoryPipes into _data
@@ -85,11 +82,9 @@ class GameMap {
 				var pipesAttached = 0;
 				if (isOilSource(i, j)) 
 				{
-					trace(i);
-					trace(j);
+					
 					if (onlyOneConnection(i, j) != 1)
 					{
-						trace(onlyOneConnection(i, j));
 						return false;
 					}
 				}
@@ -110,10 +105,10 @@ class GameMap {
 		// If _data[x][y] is an oil source and it matches with the start pipe, return true
 		if (_data[x][y] > 99)
 		{
-			trace(oil);
+		
 			if (oilMatchesSource(x, y, oil))
 			{
-				trace("UUUUUUUU");
+
 				return true;
 			}
 			else
@@ -250,7 +245,6 @@ class GameMap {
 				}
 			}
 		}
-		trace("MMMMMMMMMMM");
 		return allOilUsed();
 	}
 
@@ -523,7 +517,6 @@ class GameMap {
 		_data[y][x] = 0;
 		/*for (i in 0...10)
 		{
-			trace(_data[i].toString());
 		}*/
 	}
 

@@ -45,7 +45,7 @@ class Player extends FlxSprite {
     private var currentPipeType : Int = cast PipeType.STRAIGHT;
     private var characterX : Int = 0;
     private var characterY : Int = 0;
-    static var IndexToTileType : Array<Int> = [-1,0,0,1,1,1,1,2,2,2,2,3];
+    static var IndexToTileType : Array<Int> = [-1,0,0,1,1,1,1,3,3,3,3,2];
 
     public function new(?X:Float=0, ?Y:Float=0, mapReference : GameMap) {
         super(X, Y);

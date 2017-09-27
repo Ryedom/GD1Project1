@@ -128,7 +128,7 @@ class SceneBetweenFour extends FlxState
 		}
 		if (FlxG.keys.pressed.ANY && _delayUntilGo.elapsedTime > 2)
 		{
-			//FlxG.switchState(new SceneTwo());
+			FlxG.switchState(new MainGameStateFour());
 		}
 	}
 }

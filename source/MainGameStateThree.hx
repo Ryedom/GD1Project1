@@ -10,12 +10,12 @@ import flixel.tile.FlxTilemap;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 
-class MainGameState extends TransitionSetup
+class MainGameStateThree extends TransitionSetup
 {
 	private var _map : GameMap;
-	private var _mapPath : String = AssetPaths.levelOne__oel;
+	private var _mapPath : String = AssetPaths.levelThree__oel;
 	private var _background : FlxSprite;
-	private var _pipeAmounts : Array<Int> = [5,5,5,5];
+	private var _pipeAmounts : Array<Int> = [7,5,2,1];
 	private var _timerText: FlxText;
 	private var _timer: Float = 300;
 	private var intNum: Int=0;
@@ -46,7 +46,7 @@ class MainGameState extends TransitionSetup
 		else{
 			add(new FlxText(1280/2-200,720/2-100,600,"Level Complete!",72));
 			if(FlxG.keys.pressed.ANY)
-				FlxG.switchState(new SceneBetweenOne());
+				FlxG.switchState(new SceneBetweenFour());
 		}
 	}
 
