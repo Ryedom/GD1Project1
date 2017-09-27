@@ -239,7 +239,7 @@ class GameMap {
 	// Finds the y coordinate of VictoryPipes (x is always 0)
 	private function vPipeCoords():Array<Int>
 	{
-		var _array:Array<Int>;
+		var _array = new Array();
 		for (y in 0...10)
 		{
 			if (isVPipe(0, y))
@@ -283,7 +283,7 @@ class GameMap {
 			case(8): return true;
 			case(9): return false;
 			case(10): return true;
-			case(22): return false
+			case(22): return false;
 			case(33): return false;
 			case(44): return false;
 			default: return false;
@@ -305,9 +305,9 @@ class GameMap {
 			case(8): return false;
 			case(9): return true;
 			case(10): return true;
-			case(22): return true
+			case(22): return true;
 			case(33): return true;
-			case(44): return true
+			case(44): return true;
 			default: return false;
 		}
 	}
@@ -327,7 +327,7 @@ class GameMap {
 			case(8): return true;
 			case(9): return true;
 			case(10): return false;
-			case(22): return true
+			case(22): return true;
 			case(33): return true;
 			case(44): return true;
 			default: return false;
@@ -350,7 +350,7 @@ class GameMap {
 			case(8): return true;
 			case(9): return true;
 			case(10): return true;
-			case(22): return false
+			case(22): return false;
 			case(33): return false;
 			case(44): return false;
 			default: return false;
@@ -563,7 +563,13 @@ class GameMap {
 			_mEntities.add(_player);
 		}
 		if (entityName == "OilSource") {
+			//x -= cast _offset.x;
+			//y -= cast _offset.y;
+			trace(x);
+			trace(y);
 			var _oil : OilSource = new OilSource(x,y,color);
+			trace(_oil.getX());
+			trace(_oil.getY());
 			addOil(_oil.getX(), _oil.getY(), color);
 			_mEntities.add(_oil);
 		}
