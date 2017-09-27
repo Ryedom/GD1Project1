@@ -10,7 +10,7 @@ import flixel.tile.FlxTilemap;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 
-class TestState extends FlxState
+class MainGameState extends FlxState
 {
 	private var _map : GameMap;
 	private var _mapPath : String = AssetPaths.levelOne__oel;
