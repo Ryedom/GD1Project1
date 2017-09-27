@@ -83,8 +83,11 @@ class GameMap {
 				var pipesAttached = 0;
 				if (isOilSource(i, j)) 
 				{
+					trace(i);
+					trace(j);
 					if (onlyOneConnection(i, j) != 1)
 					{
+						trace(onlyOneConnection(i, j));
 						return false;
 					}
 				}
@@ -108,6 +111,7 @@ class GameMap {
 			trace(oil);
 			if (oilMatchesSource(x, y, oil))
 			{
+				trace("UUUUUUUU");
 				return true;
 			}
 			else
@@ -190,7 +194,6 @@ class GameMap {
 	// Calls recursive function starting from given starting points
 	public function checkSolution():Bool
 	{
-		var complete = false;
 		var yList = vPipeCoords();
 
 		for (y in yList)
@@ -245,6 +248,7 @@ class GameMap {
 				}
 			}
 		}
+		trace("MMMMMMMMMMM");
 		return allOilUsed();
 	}
 
@@ -386,19 +390,19 @@ class GameMap {
 
 	// HC ISSUE?
 	// Returns 1 if  _data[i][j] has a pipe in it, 0 if none
-	private function hasPipe(x:Int, y:Int):Int
+	private function hasPipe(x:Int, y:Int):Bool
 	{
 		if (x < 0 || y < 0 || x > 9 || y > 9)
 		{
-			return 0;
+			return false;
 		}
 		else if (isPipe(x, y))
 		{
-			return 1;
+			return true;
 		}
 		else
 		{
-			return 0;
+			return false;
 		}
 	}
 
@@ -475,19 +479,19 @@ class GameMap {
 	private function onlyOneConnection(x:Int, y:Int):Int
 	{
 		var pipesAttached = 0;
-		if (hasPipe(x, y-1) && getSouth(_data[x][y-1]))
+		if (hasPipe(x-1, y) && getSouth(_data[x-1][y]))
 		{
 			pipesAttached += 1;
 		}
-		if (hasPipe(x, y+1) && getNorth(_data[x][y+1]))
+		if (hasPipe(x+1, y) && getNorth(_data[x+1][y]))
 		{
 			pipesAttached += 1;
 		}
-		if (hasPipe(x-1, y) && getEast(_data[x-1][y]))
+		if (hasPipe(x, y-1) && getEast(_data[x][y-1]))
 		{
 			pipesAttached += 1;
 		}
-		if (hasPipe(x+1, y) && getWest(_data[x+1][y]))
+		if (hasPipe(x, y+1) && getWest(_data[x][y+1]))
 		{
 			pipesAttached += 1;
 		}
