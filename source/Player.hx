@@ -25,7 +25,6 @@ abstract PipeType(Int) {
     var CURVED = 1;
     var CROSS = 2;
     var TWOWAY = 3;
-    var CROSSOVER = 4;
 }
 
 class PipeTileOrder {
@@ -33,7 +32,6 @@ class PipeTileOrder {
     public static var CURVED = [3, 4, 5, 6];
     public static var CROSS = [11, 11, 11, 11];
     public static var TWOWAY = [10, 7, 8, 9];
-    public static var CROSSOVER = [12, 12, 12, 12];
 }
 
 class Player extends FlxSprite {
@@ -110,89 +108,93 @@ class Player extends FlxSprite {
     }
 
     private function movement():Void {
-        // Retrieve inputs
-        var _up:Bool = FlxG.keys.anyPressed([W]);
-        var _left:Bool = FlxG.keys.anyPressed([A]);
-        var _down:Bool = FlxG.keys.anyPressed([S]);
-        var _right:Bool = FlxG.keys.anyPressed([D]);
+		if (!currentMap.winCondition){
+			// Retrieve inputs
+			var _up:Bool = FlxG.keys.anyPressed([W]);
+			var _left:Bool = FlxG.keys.anyPressed([A]);
+			var _down:Bool = FlxG.keys.anyPressed([S]);
+			var _right:Bool = FlxG.keys.anyPressed([D]);
 
-        #if !FLX_NO_GAMEPAD
-        var gamepad = FlxG.gamepads.lastActive;
-        if (gamepad != null) {
-            _up = _up || gamepad.pressed.DPAD_UP || gamepad.getYAxis(LEFT_ANALOG_STICK) < 0.0;
-            _left = _left || gamepad.pressed.DPAD_LEFT || gamepad.getXAxis(LEFT_ANALOG_STICK) < 0.0;
-            _down = _down || gamepad.pressed.DPAD_DOWN || gamepad.getYAxis(LEFT_ANALOG_STICK) > 0.0;
-            _right = _right || gamepad.pressed.DPAD_RIGHT || gamepad.getXAxis(LEFT_ANALOG_STICK) > 0.0;
-        }
-        #end
+			#if !FLX_NO_GAMEPAD
+			var gamepad = FlxG.gamepads.lastActive;
+			if (gamepad != null) {
+				_up = _up || gamepad.pressed.DPAD_UP || gamepad.getYAxis(LEFT_ANALOG_STICK) < 0.0;
+				_left = _left || gamepad.pressed.DPAD_LEFT || gamepad.getXAxis(LEFT_ANALOG_STICK) < 0.0;
+				_down = _down || gamepad.pressed.DPAD_DOWN || gamepad.getYAxis(LEFT_ANALOG_STICK) > 0.0;
+				_right = _right || gamepad.pressed.DPAD_RIGHT || gamepad.getXAxis(LEFT_ANALOG_STICK) > 0.0;
+			}
+			#end
 
-        // Only move when not already moving between tiles
-        if (!gridTween.active) {
-            if (_up) {
-                // Check the tilemap for a possible collision before moving
-                if (!checkCollision(new FlxPoint(x, y - 64))) {
-                    gridTween = FlxTween.tween(this, { x: this.x, y: this.y - 64}, tweenDuration);
-                    facing = FlxObject.UP;
-                }
-            }
-            else if (_down) {
-                if (!checkCollision(new FlxPoint(x, y + 64))) {
-                    gridTween = FlxTween.tween(this, { x: this.x, y: this.y + 64}, tweenDuration);
-                    facing = FlxObject.DOWN;
-                }
-            }
-            else if (_left) {
-                if (!checkCollision(new FlxPoint(x - 64, y))) {
-                    gridTween = FlxTween.tween(this, { x: this.x - 64, y: this.y}, tweenDuration);
-                    facing = FlxObject.LEFT;
-                }
-            }
-            else if (_right) {
-                if (!checkCollision(new FlxPoint(x + 64, y))) {
-                    gridTween = FlxTween.tween(this, { x: this.x + 64, y: this.y}, tweenDuration);
-                    facing = FlxObject.RIGHT;
-                }
-            }
-        }
+			// Only move when not already moving between tiles
+			if (!gridTween.active) {
+				if (_up) {
+					// Check the tilemap for a possible collision before moving
+					if (!checkCollision(new FlxPoint(x, y - 64))) {
+						gridTween = FlxTween.tween(this, { x: this.x, y: this.y - 64}, tweenDuration);
+						facing = FlxObject.UP;
+					}
+				}
+				else if (_down) {
+					if (!checkCollision(new FlxPoint(x, y + 64))) {
+						gridTween = FlxTween.tween(this, { x: this.x, y: this.y + 64}, tweenDuration);
+						facing = FlxObject.DOWN;
+					}
+				}
+				else if (_left) {
+					if (!checkCollision(new FlxPoint(x - 64, y))) {
+						gridTween = FlxTween.tween(this, { x: this.x - 64, y: this.y}, tweenDuration);
+						facing = FlxObject.LEFT;
+					}
+				}
+				else if (_right) {
+					if (!checkCollision(new FlxPoint(x + 64, y))) {
+						gridTween = FlxTween.tween(this, { x: this.x + 64, y: this.y}, tweenDuration);
+						facing = FlxObject.RIGHT;
+					}
+				}
+			}
 
-        // Animation Stuff
-        switch (animation.name) {
-            case "Left":
-                if (!gridTween.active) {
-                    animation.play("StopLeft");
-                }
-                else if (facing == FlxObject.RIGHT) {
-                    var currentFrame : Int = animation.frameIndex;
-                    animation.play("Right");
-                    animation.frameIndex = currentFrame;
-                    animation.finish();
-                }
-            case "Right":
-                if (!gridTween.active) {
-                    animation.play("StopRight");
-                }
-                else if (facing == FlxObject.LEFT) {
-                    var currentFrame : Int = animation.frameIndex;
-                    animation.play("Left");
-                    animation.frameIndex = currentFrame;
-                    animation.finish();
-                }
-            case "StopLeft":
-                if (gridTween.active) {
-                    if (_right)
-                        animation.play("Right");
-                    else
-                        animation.play("Left");
+			// Animation Stuff
+			switch (animation.name) {
+				case "Left":
+					if (!gridTween.active) {
+						animation.play("StopLeft");
+					}
+					else if (facing == FlxObject.RIGHT) {
+						var currentFrame : Int = animation.frameIndex;
+						animation.play("Right");
+						animation.frameIndex = currentFrame;
+						animation.finish();
+					}
+				case "Right":
+					if (!gridTween.active) {
+						animation.play("StopRight");
+					}
+					else if (facing == FlxObject.LEFT) {
+						var currentFrame : Int = animation.frameIndex;
+						animation.play("Left");
+						animation.frameIndex = currentFrame;
+						animation.finish();
+					}
+				case "StopLeft":
+					if (gridTween.active) {
+						if (_right)
+							animation.play("Right");
+						else
+							animation.play("Left");
                         
-                }
-            case "StopRight":
-                if (gridTween.active) {
-                    if (_left)
-                        animation.play("Left");
-                    else
-                        animation.play("Right");
-                }
-        }
+					}
+				case "StopRight":
+					if (gridTween.active) {
+						if (_left)
+							animation.play("Left");
+						else
+							animation.play("Right");
+					}
+			}
+		
+		
+		}
     }
 
     private function pipePlace():Void {
@@ -203,6 +205,8 @@ class Player extends FlxSprite {
         var _right:Bool = FlxG.keys.anyJustPressed([RIGHT]);
         var _rotateLeft:Bool = FlxG.keys.anyJustPressed([Q]);
         var _rotateRight:Bool = FlxG.keys.anyJustPressed([E]);
+		var _next:Bool = FlxG.keys.anyJustPressed([J]);
+		var _prev:Bool = FlxG.keys.anyJustPressed([K]);
         var _removePipe:Bool = FlxG.keys.anyPressed([SHIFT]);
 
         #if !FLX_NO_GAMEPAD
@@ -228,6 +232,17 @@ class Player extends FlxSprite {
                 currentPipeDirection = (currentPipeDirection + 1) % 4;
             }
         }
+		
+		if (!(_next && _prev)){
+		
+			if (_next){
+				currentPipeType = currentPipeType == 0 ? 3 : currentPipeType - 1;
+			}
+			else if (_prev){
+				currentPipeType = (currentPipeType + 1) % 4;
+			}
+		}
+		
 
         // Handle pipe placement
         if (_up || _left || _down || _right) {
@@ -245,6 +260,7 @@ class Player extends FlxSprite {
             else if (_right) {
                 placePoint = new FlxPoint(x + 64, y);
             }
+				
             // Get the tile location
             var tileCoords : FlxPoint = toTilemapCoords(placePoint,pipeMap);
             var tileX : Int = cast tileCoords.x;
@@ -272,10 +288,10 @@ class Player extends FlxSprite {
                     case TWOWAY:
                         pipeMap.setTile(tileX,tileY,PipeTileOrder.TWOWAY[currentPipeDirection]);
                         currentMap.addPipe(tileX, tileY, PipeTileOrder.TWOWAY[currentPipeDirection]);
-                    case CROSSOVER:
-                        pipeMap.setTile(tileX,tileY,PipeTileOrder.CROSSOVER[currentPipeDirection]);
-                        currentMap.addPipe(tileX, tileY, PipeTileOrder.CROSSOVER[currentPipeDirection]);
                 }
+				if (currentMap.checkSolution()){
+					currentMap.winCondition = true;
+				}
             }
         }
     }
