@@ -32,8 +32,6 @@ class GameMap {
 
 	private var _offset : FlxPoint;
 	
-	////////////////////////////// NO HARDCODING SIZE OF ARRAY
-	////////////////////////////// ALL OTHER HARDCODED SIZES WILL ALSO HAVE TO BE CHANGED
 	private var _data:Array<Array<Int>> = [for (i in 0...10) [for (j in 0...10) -1]];
 
 
@@ -85,11 +83,7 @@ class GameMap {
 				var pipesAttached = 0;
 				if (isOilSource(i, j)) 
 				{
-					pipesAttached += hasPipe(i, j-1);
-					pipesAttached += hasPipe(i-1, j);
-					pipesAttached += hasPipe(i+1, j);
-					pipesAttached += hasPipe(i, j+1);
-					if (pipesAttached != 1)
+					if (onlyOneConnection(i, j) != 1)
 					{
 						return false;
 					}
@@ -111,6 +105,7 @@ class GameMap {
 		// If _data[x][y] is an oil source and it matches with the start pipe, return true
 		if (_data[x][y] > 99)
 		{
+			trace(oil);
 			if (oilMatchesSource(x, y, oil))
 			{
 				return true;
@@ -196,7 +191,6 @@ class GameMap {
 	public function checkSolution():Bool
 	{
 		var complete = false;
-		// these are where you start placing, x+1 underneath starter pipe
 		var yList = vPipeCoords();
 
 		for (y in yList)
@@ -208,6 +202,19 @@ class GameMap {
 			else
 			{
 				var pipe = _data[0][y];
+				var color:OilSource.OilColor;
+				if (pipe == 22)
+				{
+					color = Red;
+				}
+				else if (pipe == 33)
+				{
+					color = Blue;
+				}
+				else
+				{
+					color = Black;
+				}
 				var temp = true;
 				var color: OilSource.OilColor;
 				if (pipe == 22){
@@ -462,6 +469,29 @@ class GameMap {
 			case(Black): return (_data[x][y] == 400);
 			default: return false;
 		}
+	}
+
+	// Returns number of connected pipes to the oil source at x, y
+	private function onlyOneConnection(x:Int, y:Int):Int
+	{
+		var pipesAttached = 0;
+		if (hasPipe(x, y-1) && getSouth(_data[x][y-1]))
+		{
+			pipesAttached += 1;
+		}
+		if (hasPipe(x, y+1) && getNorth(_data[x][y+1]))
+		{
+			pipesAttached += 1;
+		}
+		if (hasPipe(x-1, y) && getEast(_data[x-1][y]))
+		{
+			pipesAttached += 1;
+		}
+		if (hasPipe(x+1, y) && getWest(_data[x+1][y]))
+		{
+			pipesAttached += 1;
+		}
+		return pipesAttached;
 	}
 
 	/*
