@@ -254,6 +254,7 @@ class Player extends FlxSprite {
             if (_removePipe) {
 				if (tileX > -1 && tileY > -1){
 				    pipeMap.setTile(tileX,tileY,0);
+                    currentMap.removePipe(tileX, tileY);
 				}
             }
             // If not, place a tile based on the current placement rotation.
@@ -261,14 +262,19 @@ class Player extends FlxSprite {
                 switch (currentPipeType) {
                     case STRAIGHT:
                         pipeMap.setTile(tileX,tileY,PipeTileOrder.STRAIGHT[currentPipeDirection]);
+                        currentMap.addPipe(tileX, tileY, PipeTileOrder.STRAIGHT[currentPipeDirection]);
                     case CURVED:
                         pipeMap.setTile(tileX,tileY,PipeTileOrder.CURVED[currentPipeDirection]);
+                        currentMap.addPipe(tileX, tileY, PipeTileOrder.CURVED[currentPipeDirection]);
                     case CROSS:
                         pipeMap.setTile(tileX,tileY,PipeTileOrder.CROSS[currentPipeDirection]);
+                        currentMap.addPipe(tileX, tileY, PipeTileOrder.CROSS[currentPipeDirection]);
                     case TWOWAY:
                         pipeMap.setTile(tileX,tileY,PipeTileOrder.TWOWAY[currentPipeDirection]);
+                        currentMap.addPipe(tileX, tileY, PipeTileOrder.TWOWAY[currentPipeDirection]);
                     case CROSSOVER:
                         pipeMap.setTile(tileX,tileY,PipeTileOrder.CROSSOVER[currentPipeDirection]);
+                        currentMap.addPipe(tileX, tileY, PipeTileOrder.CROSSOVER[currentPipeDirection]);
                 }
             }
         }

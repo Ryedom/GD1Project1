@@ -6,6 +6,8 @@ import flixel.FlxObject;
 
 class VictoryPipe extends FlxSprite {
     @:isVar public var oilColor(get,set) : OilSource.OilColor;
+    public var _x: Int;
+    public var _y: Int;
 
     public function get_oilColor() {
         return oilColor;
@@ -13,6 +15,22 @@ class VictoryPipe extends FlxSprite {
 
     private function set_oilColor(value) {
         return oilColor = value;
+    }
+
+    public function getX() {
+        return _x;
+    }
+
+    public function getY() {
+        return _y;
+    }
+
+    public function setX(newX:Int) {
+        _x = Std.int(newX/64);
+    }
+
+    public function setY(newY:Int) {
+        _y = Std.int(newY/64);
     }
 
     public function new(?X:Float=0, ?Y:Float=0, color : OilSource.OilColor) {

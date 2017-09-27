@@ -52,6 +52,15 @@ class GameMap {
 		}
 	}
 
+	public function addPipe(x:Int, y:Int, tile:Int):Void
+	{
+		_data[y][x] = tile;
+		for (i in 0...10)
+		{
+			trace(_data[i].toString());
+		}
+	}
+
 	// Adds VictoryPipes into _data
 	private function addVPipe(x:Int, y:Int, color:OilSource.OilColor):Void
 	{
@@ -428,7 +437,7 @@ class GameMap {
 				//var p = _data[i][j];
 				//trace('$p ');
 			}
-			trace(_data[i].toString());
+			//trace(_data[i].toString());
 		}
 	}
 
@@ -459,6 +468,16 @@ class GameMap {
 			case WEST: return getEast(_data[x][y]);
 		}
 		return false;
+	}
+
+	// Removes the pipe at (x, y)
+	public function removePipe(x:Int, y:Int):Void
+	{
+		_data[y][x] = 0;
+		/*for (i in 0...10)
+		{
+			trace(_data[i].toString());
+		}*/
 	}
 
 
@@ -563,18 +582,17 @@ class GameMap {
 			_mEntities.add(_player);
 		}
 		if (entityName == "OilSource") {
-			//x -= cast _offset.x;
-			//y -= cast _offset.y;
-			trace(x);
-			trace(y);
 			var _oil : OilSource = new OilSource(x,y,color);
-			trace(_oil.getX());
-			trace(_oil.getY());
+			_oil.setX(x-cast _offset.x);
+			_oil.setY(y-cast _offset.y);
 			addOil(_oil.getX(), _oil.getY(), color);
 			_mEntities.add(_oil);
 		}
 		if (entityName == "VictoryPipe") {
 			var _pipe : VictoryPipe = new VictoryPipe(x,y,color);
+			_pipe.setX(x-cast _offset.x);
+			_pipe.setY(y-cast _offset.y);
+			addVPipe(_pipe.getX(), _pipe.getY(), color);
 			_mEntities.add(_pipe);
 		}
 	}
