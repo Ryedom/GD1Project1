@@ -27,7 +27,6 @@ class MainGameStateTwo extends TransitionSetup
 		var offset : FlxPoint = new FlxPoint(350,81);
 		_map = new GameMap(_mapPath,GameMap.MapTypeEnum.Playfield,offset,_pipeAmounts);
 		_background = new FlxSprite(0,0,AssetPaths.fin_playspace__jpg);
-		FlxG.sound.playMusic(AssetPaths.underground__ogg,1,true);
 		_timerText = new FlxText(10, 10);
         _timerText.size = 48;
 	}

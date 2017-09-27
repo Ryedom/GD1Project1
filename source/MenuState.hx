@@ -33,6 +33,9 @@ class MenuState extends TransitionSetup
 		_bg = new BackgroundImage();
 		_bg.setBg("assets/images/CutsceneAssets/title_3.png");
 		add(_bg);
+
+		if (FlxG.sound.music == null)
+			FlxG.sound.playMusic(AssetPaths.underground__ogg,1,true);
 		
 		_banner = new FlxButton(40, 40, "", clickPlay);
 		_banner.loadGraphic("assets/images/Oil_Dady.png");
