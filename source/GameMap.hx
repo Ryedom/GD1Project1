@@ -28,11 +28,10 @@ class GameMap {
 	public var _mConstantPipes : FlxTilemap;
     public var _mEntities : FlxGroup;
 	public var _Player : Player;
+	public var winCondition : Bool = false;
 
 	private var _offset : FlxPoint;
 	
-	////////////////////////////// NO HARDCODING SIZE OF ARRAY
-	////////////////////////////// ALL OTHER HARDCODED SIZES WILL ALSO HAVE TO BE CHANGED
 	private var _data:Array<Array<Int>> = [for (i in 0...10) [for (j in 0...10) -1]];
 
 
@@ -82,13 +81,9 @@ class GameMap {
 			for (j in 0...10) 
 			{
 				var pipesAttached = 0;
-				if (_data[i][j] > 99) 
+				if (isOilSource(i, j)) 
 				{
-					pipesAttached += hasPipe(i, j-1);
-					pipesAttached += hasPipe(i-1, j);
-					pipesAttached += hasPipe(i+1, j);
-					pipesAttached += hasPipe(i, j+1);
-					if (pipesAttached != 1)
+					if (onlyOneConnection(i, j) != 1)
 					{
 						return false;
 					}
@@ -110,6 +105,7 @@ class GameMap {
 		// If _data[x][y] is an oil source and it matches with the start pipe, return true
 		if (_data[x][y] > 99)
 		{
+			trace(oil);
 			if (oilMatchesSource(x, y, oil))
 			{
 				return true;
@@ -140,49 +136,49 @@ class GameMap {
 					case(NORTH):
 						var temp:Bool = true;
 						if (getNorth(pipe) == true) {
-							temp = (checkPipe(x-1, y, NORTH, Black) && temp);
+							temp = (checkPipe(x-1, y, NORTH, oil) && temp);
 						}
 						if (getWest(pipe) == true) {
-							temp = (checkPipe(x, y-1, WEST, Black) && temp);
+							temp = (checkPipe(x, y-1, WEST, oil) && temp);
 						}
 						if (getEast(pipe) == true) {
-							temp = (checkPipe(x, y+1, EAST, Black) && temp);
+							temp = (checkPipe(x, y+1, EAST, oil) && temp);
 						}
 						return temp;
 					case(WEST):
 						var temp:Bool = true;
 						if (getNorth(pipe) == true) {
-							temp = (checkPipe(x-1, y, NORTH, Black) && temp);
+							temp = (checkPipe(x-1, y, NORTH, oil) && temp);
 						}
 						if (getWest(pipe) == true) {
-							temp = (checkPipe(x, y-1, WEST, Black) && temp);
+							temp = (checkPipe(x, y-1, WEST, oil) && temp);
 						}
 						if (getSouth(pipe) == true) {
-							temp = (checkPipe(x+1, y, SOUTH, Black) && temp);
+							temp = (checkPipe(x+1, y, SOUTH, oil) && temp);
 						}
 						return temp;
 					case(EAST):
 						var temp:Bool = true;
 						if (getNorth(pipe) == true) {
-							temp = (checkPipe(x-1, y, NORTH, Black) && temp);
+							temp = (checkPipe(x-1, y, NORTH, oil) && temp);
 						}
 						if (getSouth(pipe) == true) {
-							temp = (checkPipe(x+1, y, SOUTH, Black) && temp);
+							temp = (checkPipe(x+1, y, SOUTH, oil) && temp);
 						}
 						if (getEast(pipe) == true) {
-							temp = (checkPipe(x, y+1, EAST, Black) && temp);
+							temp = (checkPipe(x, y+1, EAST, oil) && temp);
 						}
 						return temp;
 					case(SOUTH):
 						var temp:Bool = true;
 						if (getSouth(pipe) == true) {
-							temp = (checkPipe(x+1, y, SOUTH, Black) && temp);
+							temp = (checkPipe(x+1, y, SOUTH, oil) && temp);
 						}
 						if (getWest(pipe) == true) {
-							temp = (checkPipe(x, y-1, WEST, Black) && temp);
+							temp = (checkPipe(x, y-1, WEST, oil) && temp);
 						}
 						if (getEast(pipe) == true) {
-							temp = (checkPipe(x, y+1, EAST, Black) && temp);
+							temp = (checkPipe(x, y+1, EAST, oil) && temp);
 						}
 						return temp;
 					default: return false;
@@ -192,10 +188,9 @@ class GameMap {
 	}
 
 	// Calls recursive function starting from given starting points
-	private function checkSolution():Bool
+	public function checkSolution():Bool
 	{
 		var complete = false;
-		// these are where you start placing, x+1 underneath starter pipe
 		var yList = vPipeCoords();
 
 		for (y in yList)
@@ -207,19 +202,42 @@ class GameMap {
 			else
 			{
 				var pipe = _data[0][y];
+				var color:OilSource.OilColor;
+				if (pipe == 22)
+				{
+					color = Red;
+				}
+				else if (pipe == 33)
+				{
+					color = Blue;
+				}
+				else
+				{
+					color = Black;
+				}
 				var temp = true;
+				var color: OilSource.OilColor;
+				if (pipe == 22){
+					color = Red;
+				}
+				else if (pipe == 33){
+					color = Blue;
+				}
+				else {
+					color = Black;
+				}
 				if (!getNorth(pipe))
 				{
 					return false;
 				}
 				if (getWest(pipe) == true) {
-					temp = (checkPipe(0, y-1, WEST, Black) && temp);
+					temp = (checkPipe(0, y-1, WEST, color) && temp);
 				}
 				if (getSouth(pipe) == true) {
-					temp = (checkPipe(1, y, SOUTH, Black) && temp);
+					temp = (checkPipe(1, y, SOUTH, color) && temp);
 				}
 				if (getEast(pipe) == true) {
-					temp = (checkPipe(0, y+1, EAST, Black) && temp);
+					temp = (checkPipe(0, y+1, EAST, color) && temp);
 				}
 				if (temp == false)
 				{
@@ -446,11 +464,34 @@ class GameMap {
 	{
 		switch(color)
 		{
-			case(Red): return (_data[x][y] == 100);
-			case(Blue): return (_data[x][y] == 200);
-			case(Black): return (_data[x][y] == 300);
+			case(Red): return (_data[x][y] == 200);
+			case(Blue): return (_data[x][y] == 300);
+			case(Black): return (_data[x][y] == 400);
 			default: return false;
 		}
+	}
+
+	// Returns number of connected pipes to the oil source at x, y
+	private function onlyOneConnection(x:Int, y:Int):Int
+	{
+		var pipesAttached = 0;
+		if (hasPipe(x, y-1) && getSouth(_data[x][y-1]))
+		{
+			pipesAttached += 1;
+		}
+		if (hasPipe(x, y+1) && getNorth(_data[x][y+1]))
+		{
+			pipesAttached += 1;
+		}
+		if (hasPipe(x-1, y) && getEast(_data[x-1][y]))
+		{
+			pipesAttached += 1;
+		}
+		if (hasPipe(x+1, y) && getWest(_data[x+1][y]))
+		{
+			pipesAttached += 1;
+		}
+		return pipesAttached;
 	}
 
 	/*
