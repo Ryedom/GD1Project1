@@ -35,7 +35,7 @@ class MenuState extends TransitionSetup
 		add(_bg);
 		
 		_banner = new FlxButton(40, 40, "", clickPlay);
-		_banner.loadGraphic("assets/images/baller_banner.png");
+		_banner.loadGraphic("assets/images/Oil_Dady.png");
 		_banner.updateHitbox();
 		_banner.setPosition((FlxG.width/2 - _banner.width/2), -_banner.height);
 		FlxTween.tween(_banner, {x : (FlxG.width / 2 - _banner.width / 2), y : (FlxG.height * 1.35 / 4 - _banner.height / 2)}, 1, {ease: FlxEase.cubeIn});
