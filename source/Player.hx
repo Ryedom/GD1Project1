@@ -42,12 +42,14 @@ class Player extends FlxSprite {
     private var currentMap : GameMap;
     private var pipeMap : FlxTilemap;
     private var currentPipeDirection : Int = 0;
-    private var currentPipeType : Int = cast PipeType.TWOWAY;
+    private var currentPipeType : Int = cast PipeType.STRAIGHT;
     private var characterX : Int = 0;
     private var characterY : Int = 0;
 
     public function new(?X:Float=0, ?Y:Float=0, mapReference : GameMap) {
         super(X, Y);
+        this.x = X;
+        this.y = Y;
         // Load player spritesheet
         loadGraphic(AssetPaths.rb_ss__png, true, 128, 128);
         pixelPerfectPosition = true;
