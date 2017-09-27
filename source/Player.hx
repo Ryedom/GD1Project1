@@ -252,7 +252,9 @@ class Player extends FlxSprite {
 
             // If holding shift, remove the tile in that direction.
             if (_removePipe) {
-                pipeMap.setTile(tileX,tileY,0);
+				if (tileX > -1 && tileY > -1){
+				    pipeMap.setTile(tileX,tileY,0);
+				}
             }
             // If not, place a tile based on the current placement rotation.
             else if (!checkCollision(placePoint)) {
