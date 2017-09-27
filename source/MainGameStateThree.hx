@@ -17,7 +17,7 @@ class MainGameStateThree extends TransitionSetup
 	private var _background : FlxSprite;
 	private var _pipeAmounts : Array<Int> = [7,5,2,1];
 	private var _timerText: FlxText;
-	private var _timer: Float = 300;
+	private var _timer: Float = 90;
 	private var intNum: Int=0;
 	
 	public var wonLevel: Bool = false;
