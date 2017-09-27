@@ -45,7 +45,7 @@ class MenuState extends TransitionSetup
 		FlxTween.tween(_playButton, {x : (FlxG.width / 2 - _playButton.width / 2), y : (FlxG.height*3 / 4 - _playButton.height/2 - 50)}, 1, {ease: FlxEase.cubeIn});
 		
 		_instructButton = new FlxButton(40, 40, "", instructionClick);
-		_instructButton.loadGraphic("assets/images/start.jpg");
+		_instructButton.loadGraphic("assets/images/Htp.jpg");
 		_instructButton.updateHitbox();
 		_instructButton.setPosition((FlxG.width/2 - _playButton.width/2), -_playButton.height);
 		FlxTween.tween(_instructButton, {x : (FlxG.width / 2 - _instructButton.width / 2), y : (FlxG.height*3 / 4 - _instructButton.height/2 + 85)}, 1, {ease: FlxEase.cubeIn});
@@ -61,7 +61,7 @@ class MenuState extends TransitionSetup
 	}
 	
 	function clickPlay():Void{
-		FlxG.switchState(new SceneBEOne());
+		FlxG.switchState(new SceneOne());
 	}
 	
 	function instructionClick():Void{
